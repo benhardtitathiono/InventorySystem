@@ -6,6 +6,7 @@ use App\Models\Batch;
 use App\Models\ProductAbisPakai;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductAbisPakaiController extends Controller
 {
@@ -51,16 +52,16 @@ class ProductAbisPakaiController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request);
         $idProd = Carbon::now(
             'Asia/Jakarta'
         )->format('is');
         $pap = new ProductAbisPakai();
         $pap->id = $idProd;
-        $pap->nama_barang = $request->get('nameProd');
+        $pap->nama_barang = $request->get('nameProduct');
         $pap->satuan = $request->get('satuanProd');
         $pap->deskripsi = $request->get('descProd');
         $pap->jumlah = $request->get('jumlahProd');
-        $pap->nama_barang = $request->get('jumlahProd');
         $pap->created_at = Carbon::now(
             'Asia/Jakarta'
         )->format('Y-m-d H:i:s');
@@ -83,7 +84,7 @@ class ProductAbisPakaiController extends Controller
         ]);
         $b->save();
 
-        return redirect()->route('product.index')->with('message', 'Sukses membuat Produk Baru! Silahkan cek produk ' . $$request->get('nameProd') . ' untuk validasi');
+        return redirect()->route('product.index')->with('message', 'Sukses membuat Produk Baru! Silahkan cek produk ' . $request->get('nameProd') . ' untuk validasi');
     }
 
     /**
@@ -256,5 +257,42 @@ class ProductAbisPakaiController extends Controller
             // dd($b);
             return redirect()->back()->with('message', 'Sukses memperbaharui! Silahkan cek produk ' . $name . ' untuk validasi');
         }
+    }
+
+    function logProduct(Request $request)
+    {
+        $id = $request->get('id');
+        $logProduct = DB::table('product_abis_pakai as pap')
+            ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
+            ->join('batch_product as bp', 'lpb.batch_product', '=', 'bp.id')
+            ->where('pap.id', $id)
+            ->orderBy('lpb.tanggal', 'desc')
+            ->select('pap.id', 'pap.nama_barang', 'bp.id as batch_product', 'lpb.quantity_in', 'lpb.quantity_out', 'lpb.tanggal')
+            ->get();
+        // dd($logProduct);
+        return response()->json(
+            array(
+                'status' => 'oke',
+                'msg' => view('riwayat.logProduct', compact('logProduct'))->render()
+            )
+        );
+    }
+
+    public function laporanharianbap(Request $request)
+    {
+        //
+        $date = Carbon::now('Asia/Jakarta')->format('Y-m-d');
+        $reqDate = $request->get('dateReport');
+        if (isset($reqDate)) {
+            $date = $reqDate;
+        }
+        $logpap = DB::table('product_abis_pakai as pap')
+            ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
+            ->where('lpb.tanggal', $date)
+            ->groupBy('pap.id', 'pap.nama_barang', 'lpb.tanggal')
+            ->select('pap.id', 'pap.nama_barang', DB::raw('sum(lpb.quantity_in) as totquanin'), DB::raw('sum(lpb.quantity_out) as totquanout'), 'lpb.tanggal')
+            ->get();
+        // dd($logpap);
+        return view('riwayat.dailyreportbap', ['logpap' => $logpap, 'date' => $date]);
     }
 }

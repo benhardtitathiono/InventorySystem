@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BarangPinjam;
 use App\Http\Controllers\ProductAbisPakaiController;
 use App\Models\ProductAbisPakai;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +29,16 @@ Route::post('productabispakai/updatestokout', [ProductAbisPakaiController::class
 Route::post('/updateStockOut', [ProductAbisPakaiController::class, "updateStockOut"])->name('product.updateStockOut');
 Route::post('/productabispakai/delete/{id}', [ProductAbisPakaiController::class, "destroy"])->name('product.destroy');
 Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::class, "restore"])->name('product.restore');
+
+Route::post('/logProduct', [ProductAbisPakaiController::class, 'logProduct'])->name('log.getLogProduct');
+route::get('/laporanharianbarangabispakai', [ProductAbisPakaiController::class, 'laporanharianbap'])->name('log.logpap');
+
+route::get('/productpinjam', [BarangPinjam::class, 'index'])->name('product.index');
+// route::get('/productabispakaiterhapus', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
+// Route::post('/productbaru', [ProductAbisPakaiController::class, "store"])->name('product.store');
+// Route::post('productabispakai/updatestok', [ProductAbisPakaiController::class, 'getUpdateStokForm'])->name('product.getUpdateStokForm');
+// Route::post('/updateStock', [ProductAbisPakaiController::class, "updateStock"])->name('product.updateStock');
+// Route::post('productabispakai/updatestokout', [ProductAbisPakaiController::class, 'getUpdateStokOutForm'])->name('product.getUpdateStokOutForm');
+// Route::post('/updateStockOut', [ProductAbisPakaiController::class, "updateStockOut"])->name('product.updateStockOut');
+// Route::post('/productabispakai/delete/{id}', [ProductAbisPakaiController::class, "destroy"])->name('product.destroy');
+// Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::class, "restore"])->name('product.restore');

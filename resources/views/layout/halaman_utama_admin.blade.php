@@ -74,12 +74,12 @@ License: You must have a valid license purchased only from themeforest(the above
                     <img src="{{ asset('conquer/img/logo.png') }}" alt="logo" />
                 </a>
             </div>
-            <form class="search-form search-form-header" role="form" action="index.html">
+            {{-- <form class="search-form search-form-header" role="form" action="index.html">
                 <div class="input-icon right">
                     <i class="icon-magnifier"></i>
                     <input type="text" class="form-control input-sm" name="query" placeholder="Search...">
                 </div>
-            </form>
+            </form> --}}
             <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
             <a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -209,6 +209,24 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </li>
                                 </ul>
                             </li>
+                            <li>
+                                <a href="javascript:;">
+                                    <span class="title">Laporan</span>
+                                    <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="{{ url('laporanharianbarangabispakai') }}">
+                                            <i class="icon-list"></i>
+                                            Laporan harian barang abis pakai</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('back/albumProduct') }}">
+                                            <i class="icon-book-open"></i>
+                                            Barang peminjaman</a>
+                                    </li>
+                                </ul>
+                            </li>
                             {{-- <li>
                                 <a href="{{ url('back/transaction') }}">
 
@@ -311,26 +329,6 @@ License: You must have a valid license purchased only from themeforest(the above
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('js/jquery.editable.min.js') }}" type="text/javascript"></script>
     @yield('javascript')
-    <script>
-        $(document).ready(function() {
-            $('#listType').DataTable({
-                responsive: true,
-                "pagingType": "simple",
-
-                columnDefs: [{
-                    className: 'dtr-control',
-                    orderable: false,
-                    target: 0
-                }],
-                responsive: {
-                    details: {
-                        type: 'column',
-                        target: 'tr'
-                    }
-                }
-            });
-        });
-    </script>
     <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

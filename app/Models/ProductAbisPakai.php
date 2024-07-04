@@ -20,4 +20,10 @@ class ProductAbisPakai extends Model
     {
         return $this->belongsToMany(Batch::class, 'log_product_batch', 'product_id', 'batch_product')->withPivot('quantity_in', 'quantity_out', 'tanggal');
     }
+
+    public function productWithTrashed()
+    {
+        return $this->belongsToMany(Batch::class, 'log_product_batch', 'product_id', 'batch_product')
+            ->withPivot('quantity_in', 'quantity_out', 'tanggal')->withTrashed();
+    }
 }

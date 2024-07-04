@@ -5,6 +5,8 @@
 @endsection
 
 @section('konten')
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+
     <div class="page-content">
         @if ($errors->has('error'))
             <div class="alert alert-danger">
@@ -26,6 +28,7 @@
         @if (session('status'))
             <div class="alert alert-success">{{ session('status') }}</div>
         @endif
+
         <table id="listProduct" class="table">
             <thead>
                 <tr>
@@ -40,29 +43,37 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($pap as $p)
-                    <tr>
-                        <td>{{ $p->id }}</td>
-                        <td class="editable" id="td-nama_barang-{{ $p->id }}">{{ $p->nama_barang }}</td>
-                        <td class="editable" id="td-satuan-{{ $p->id }}">{{ $p->satuan }}</td>
-                        <td class="editable" id="td-deskripsi-{{ $p->id }}">{{ $p->deskripsi }}</td>
-                        <td id="td-jumlah-{{ $p->id }}">{{ $p->jumlah }}</td>
-                        <td id="td-created_at-{{ $p->id }}">{{ $p->updated_at }}</td>
+                @if (isset($pap))
+                    @foreach ($pap as $p)
+                        <tr>
+                            <td>{{ $p->id }}</td>
+                            <td class="editable" id="td-nama_barang-{{ $p->id }}">{{ $p->nama_barang }}</td>
+                            <td class="editable" id="td-satuan-{{ $p->id }}">{{ $p->satuan }}</td>
+                            <td class="editable" id="td-deskripsi-{{ $p->id }}">{{ $p->deskripsi }}</td>
+                            <td id="td-jumlah-{{ $p->id }}">{{ $p->jumlah }}</td>
+                            <td id="td-created_at-{{ $p->id }}">{{ $p->updated_at }}</td>
 
-                        <td style="text-align: center">
-                            <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
-                                onclick="getUpdateStokForm({{ $p->id }})">Tambah Stok</a>
-                            <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
-                                onclick="getUpdateStokOutForm({{ $p->id }})">Kurang Stok</a>
-                            <form method="POST" action="{{ route('product.destroy', $p->id) }}">
-                                @csrf
-                                {{-- @method('DELETE') --}}
-                                <input type="submit" value="Hapus" class="btn btn-danger"
-                                    onclick="return confirm('Apakah yakin ingin menghapus produk dengan ID {{ $p->id }} - {{ $p->nama_barang }}?')">
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
+                            <td style="text-align: center">
+                                <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
+                                    onclick="getUpdateStokForm({{ $p->id }})">Tambah Stok</a>
+                                <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
+                                    onclick="getUpdateStokOutForm({{ $p->id }})">Kurang Stok</a>
+                                <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
+                                    onclick="getLogProduct({{ $p->id }})">Log Stok</a>
+                                <form method="POST" action="{{ route('product.destroy', $p->id) }}">
+                                    @csrf
+                                    {{-- @method('DELETE') --}}
+                                    <input type="submit" value="Hapus" class="btn btn-danger"
+                                        onclick="return confirm('Apakah yakin ingin menghapus produk dengan ID {{ $p->id }} - {{ $p->nama_barang }}?')">
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    <td style="text-align: center; font-size:20px; font-weight:bold;" colspan="7">Tidak ada Produk
+                    </td>
+                @endif
+
             </tbody>
         </table>
 
@@ -89,7 +100,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="nameProd">Nama Produk</label>
-                            <input type="text" class="form-control" name="product" id="nameProd"
+                            <input type="text" class="form-control" name="nameProduct" id="nameProd"
                                 aria-describedby="nameHelp" placeholder="Nama produk">
 
                             <label for="satuanProd">Satuan</label>
@@ -121,6 +132,29 @@
 
 @section('javascript')
     <script>
+        $(document).ready(function() {
+            $('#listProduct').DataTable({
+                responsive: true,
+                "pagingType": "full_numbers",
+                lengthMenu: [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, 'All']
+                ],
+
+                columnDefs: [{
+                    className: 'dtr-control',
+                    orderable: false,
+                    target: 0
+                }],
+                responsive: {
+                    details: {
+                        type: 'column',
+                        target: 'tr'
+                    }
+                },
+            });
+        });
+
         function getUpdateStokForm(id) {
             $.ajax({
                 type: 'POST',
@@ -153,6 +187,20 @@
             $.ajax({
                 type: 'GET',
                 url: '{{ route('product.getDeleteProductList') }}',
+                success: function(data) {
+                    $('#modalContent').html(data.msg)
+                }
+            });
+        }
+
+        function getLogProduct(id) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('log.getLogProduct') }}',
+                data: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                    'id': id
+                },
                 success: function(data) {
                     $('#modalContent').html(data.msg)
                 }

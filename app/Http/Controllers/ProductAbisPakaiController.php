@@ -18,7 +18,7 @@ class ProductAbisPakaiController extends Controller
     public function index()
     {
         //
-        $pap = ProductAbisPakai::all();
+        $pap = ProductAbisPakai::orderBy('nama_barang')->get();
         return view('product.index', ['pap' => $pap]);
     }
 
@@ -55,7 +55,7 @@ class ProductAbisPakaiController extends Controller
         // dd($request);
         $idProd = Carbon::now(
             'Asia/Jakarta'
-        )->format('is');
+        )->format('Ymd') . rand(10, 99);
         $pap = new ProductAbisPakai();
         $pap->id = $idProd;
         $pap->nama_barang = $request->get('nameProduct');
@@ -70,7 +70,7 @@ class ProductAbisPakaiController extends Controller
         )->format('Y-m-d H:i:s');
         $pap->save();
 
-        $idBatch = $idProd . (int)Carbon::now('Asia/Jakarta')->format('YmdHis');
+        $idBatch = $idProd . (int)Carbon::now('Asia/Jakarta')->format('Ymd');
         $b = new Batch();
         $b->id = $idBatch;
         $b->tanggal_masuk = Carbon::now()->format('Y-m-d');

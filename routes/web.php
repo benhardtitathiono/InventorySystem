@@ -33,7 +33,7 @@ Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::clas
 Route::post('/logProduct', [ProductAbisPakaiController::class, 'logProduct'])->name('log.getLogProduct');
 route::get('/laporanharianbarangabispakai', [ProductAbisPakaiController::class, 'laporanharianbap'])->name('log.logpap');
 
-route::get('/productpinjam', [BarangPinjam::class, 'index'])->name('product.index');
+// route::get('/productpinjam', [BarangPinjam::class, 'index'])->name('product.index');
 // route::get('/productabispakaiterhapus', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
 // Route::post('/productbaru', [ProductAbisPakaiController::class, "store"])->name('product.store');
 // Route::post('productabispakai/updatestok', [ProductAbisPakaiController::class, 'getUpdateStokForm'])->name('product.getUpdateStokForm');

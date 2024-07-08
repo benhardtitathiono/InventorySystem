@@ -112,6 +112,7 @@
         $(document).ready(function() {
             $('#listIdentitas').DataTable({
                 responsive: true,
+
                 "pagingType": "full_numbers",
 
                 order: [
@@ -128,14 +129,16 @@
                     orderable: false,
                     target: '_all'
                 }],
+
                 responsive: {
                     details: {
                         type: 'column',
                         target: 'tr'
                     }
                 },
+
                 language: {
-                    emptyTable: 'Tidak ada data produk'
+                    emptyTable: 'Tidak ada data identitas'
                 },
             });
         });

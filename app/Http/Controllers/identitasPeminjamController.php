@@ -105,6 +105,9 @@ class identitasPeminjamController extends Controller
             $identity->deleted_at = Carbon::now(
                 'Asia/Jakarta'
             )->format('Y-m-d H:i:s');
+            $identity->updated_at = Carbon::now(
+                'Asia/Jakarta'
+            )->format('Y-m-d H:i:s');
             return redirect()->route('identitas.index')->with('message', 'Identitas ' . $identity->nama . ' berhasil dihapus');
         } catch (\PDOException $error) {
             $msg = "Data gagal dihapus. pastikan kembali tidak ada data yang terhubung sebelum dihapus";

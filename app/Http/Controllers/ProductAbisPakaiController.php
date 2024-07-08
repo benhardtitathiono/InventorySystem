@@ -141,6 +141,9 @@ class ProductAbisPakaiController extends Controller
             $pap->deleted_at = Carbon::now(
                 'Asia/Jakarta'
             )->format('Y-m-d H:i:s');
+            $pap->updated_at = Carbon::now(
+                'Asia/Jakarta'
+            )->format('Y-m-d H:i:s');
             return redirect()->route('product.index')->with('message', 'Produk ' . $pap->nama_barang . ' berhasil dihapus');
         } catch (\PDOException $error) {
             $msg = "Data gagal dihapus. pastikan kembali tidak ada data yang terhubung sebelum dihapus";

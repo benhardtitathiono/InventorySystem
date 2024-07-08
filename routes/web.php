@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\BarangPinjam;
 use App\Http\Controllers\BarangPinjamController;
 use App\Http\Controllers\identitasPeminjamController;
 use App\Http\Controllers\ProductAbisPakaiController;
@@ -40,8 +39,6 @@ Route::post('/identitaspeminjambaru', [identitasPeminjamController::class, "stor
 route::get('/identitaspeminjamterhapus', [identitasPeminjamController::class, 'identitasdeleted'])->name('identitas.getDeleteIdentitasList');
 Route::post('/identitaspeminjam/delete/{id}', [identitasPeminjamController::class, "destroy"])->name('identitas.destroy');
 Route::post('/identitaspeminjam/undelete/{id}', [identitasPeminjamController::class, "restore"])->name('identitas.restore');
-
-
 
 route::get('/productpinjam', [BarangPinjamController::class, 'index'])->name('productpinjam.index');
 

@@ -175,21 +175,6 @@ License: You must have a valid license purchased only from themeforest(the above
                             <span class="arrow "></span>
                         </a>
                         <ul class="sub-menu">
-
-                            {{-- <li>
-                                <a href="javascript:;">
-                                    <span class="title">Category</span>
-                                    <span class="arrow "></span>
-                                </a>
-                                <ul class="sub-menu">
-                                    <li>
-                                        <a href="{{ url('back/category') }}">
-                                            <i class="icon-list"></i>
-                                            List Category</a>
-                                    </li>
-
-                                </ul>
-                            </li> --}}
                             <li>
                                 <a href="javascript:;">
                                     <span class="title">Produk</span>

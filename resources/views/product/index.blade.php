@@ -34,6 +34,7 @@
                     <th>Satuan</th>
                     <th>Deskripsi</th>
                     <th>Stok</th>
+                    <th>Tanggal Ditambahkan</th>
                     <th>Terakhir Diperbarui</th>
 
                     <th>Action</th>
@@ -48,7 +49,8 @@
                             <td class="editable" id="td-satuan-{{ $p->id }}">{{ $p->satuan }}</td>
                             <td class="editable" id="td-deskripsi-{{ $p->id }}">{{ $p->deskripsi }}</td>
                             <td id="td-jumlah-{{ $p->id }}">{{ $p->jumlah }}</td>
-                            <td id="td-created_at-{{ $p->id }}">{{ $p->updated_at }}</td>
+                            <td id="td-created_at-{{ $p->id }}">{{ $p->created_at }}</td>
+                            <td id="td-updated_at-{{ $p->id }}">{{ $p->updated_at }}</td>
 
                             <td style="text-align: center">
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"

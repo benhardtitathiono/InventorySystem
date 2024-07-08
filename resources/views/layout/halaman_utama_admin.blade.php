@@ -54,9 +54,8 @@ License: You must have a valid license purchased only from themeforest(the above
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> --}}
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
-    <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" rel="stylesheet">
     @yield('css')
 
 </head>
@@ -203,9 +202,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                             Barang abis Pakai</a>
                                     </li>
                                     <li>
-                                        <a href="{{ url('back/albumProduct') }}">
+                                        <a href="{{ url('productpinjam') }}">
                                             <i class="icon-book-open"></i>
                                             Barang peminjaman</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('identitaspeminjam') }}">
+                                            <i class="icon-book-open"></i>
+                                            Identitas Peminjam</a>
                                     </li>
                                 </ul>
                             </li>
@@ -223,7 +227,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <li>
                                         <a href="{{ url('back/albumProduct') }}">
                                             <i class="icon-book-open"></i>
-                                            Barang peminjaman</a>
+                                            Laporan harian Barang pinjaman</a>
                                     </li>
                                 </ul>
                             </li>
@@ -254,18 +258,6 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- END CONTENT -->
     </div>
     <!-- END CONTAINER -->
-    <!-- BEGIN FOOTER -->
-    <div class="footer">
-        <div class="footer-inner">
-            2013 &copy; conquer by keenthemes.
-        </div>
-        <div class="footer-tools">
-            <span class="go-top">
-                <i class="fa fa-angle-up"></i>
-            </span>
-        </div>
-    </div>
-    <!-- END FOOTER -->
     <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
     <!-- BEGIN CORE PLUGINS -->
     <script src="{{ asset('conquer/plugins/jquery-1.11.0.min.js') }}" type="text/javascript"></script>
@@ -326,8 +318,8 @@ License: You must have a valid license purchased only from themeforest(the above
         });
     </script>
     <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('js/jquery.editable.min.js') }}" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+    {{-- <script src="{{ asset('js/jquery.editable.min.js') }}" type="text/javascript"></script> --}}
     @yield('javascript')
     <!-- END JAVASCRIPTS -->
 </body>

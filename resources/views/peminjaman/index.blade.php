@@ -5,8 +5,6 @@
 @endsection
 
 @section('konten')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
-
     <div class="page-content">
         @if ($errors->has('error'))
             <div class="alert alert-danger">

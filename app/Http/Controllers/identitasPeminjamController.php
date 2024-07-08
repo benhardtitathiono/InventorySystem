@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\IdentitasPeminjam;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class identitasPeminjamController extends Controller
@@ -14,6 +16,8 @@ class identitasPeminjamController extends Controller
     public function index()
     {
         //
+        $identity = IdentitasPeminjam::orderBy('nama')->get();
+        return view('identitas_peminjam.index', ['identity' => $identity]);
     }
 
     /**
@@ -35,6 +39,21 @@ class identitasPeminjamController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request);
+        do {
+            $idIdentitas = Carbon::now(
+                'Asia/Jakarta'
+            )->format('Ymd') . rand(10, 99);
+        } while (
+            IdentitasPeminjam::where('id', $idIdentitas)->exists()
+        );
+
+        $identity = new IdentitasPeminjam();
+        $identity->id = $idIdentitas;
+        $identity->nama = $request->get('nameIdentitas');
+        $identity->save();
+
+        return redirect()->route('identitas.index')->with('message', 'Sukses Membuat Identitas Baru! Silahkan cek identitas ' . $request->get('nameProd') . ' untuk validasi');
     }
 
     /**
@@ -80,5 +99,47 @@ class identitasPeminjamController extends Controller
     public function destroy($id)
     {
         //
+        try {
+            $identity = IdentitasPeminjam::find($id);
+            $identity->delete();
+            $identity->deleted_at = Carbon::now(
+                'Asia/Jakarta'
+            )->format('Y-m-d H:i:s');
+            return redirect()->route('identitas.index')->with('message', 'Identitas ' . $identity->nama . ' berhasil dihapus');
+        } catch (\PDOException $error) {
+            $msg = "Data gagal dihapus. pastikan kembali tidak ada data yang terhubung sebelum dihapus";
+            return redirect()->route('identitas.index')->with('message', $msg);
+        }
+    }
+
+    function identitasdeleted()
+    {
+        $identity = IdentitasPeminjam::onlyTrashed()->get();
+        return response()->json(
+            array(
+                'status' => 'oke',
+                'msg' => view('identitas_peminjam.getDeleteIdentitasList', compact('identity'))->render()
+            )
+        );
+    }
+
+    public function restore($id)
+    {
+        $identity = IdentitasPeminjam::withTrashed()->find($id);
+        if ($identity) {
+            $identity->restore();
+            $identity->update_at
+                = Carbon::now(
+                    'Asia/Jakarta'
+                )->format('Y-m-d H:i:s');
+            // dd($pap);
+            return redirect()->route('identitas.index')->with('message', 'Identitas dengan id ' . $identity->id . " - " . $identity->nama . ' berhasil dipulihkan');
+        } else {
+            return redirect()->route('identitas.index')->with('message', 'Identitas tidak ditemukan');
+        }
+    }
+
+    function getLogIdentitasPeminjam(Request $request)
+    {
     }
 }

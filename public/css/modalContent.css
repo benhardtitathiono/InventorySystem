@@ -1,5 +1,5 @@
 .modal-content {
-    margin: 0 25% 25% 25%;
+    margin: 0 5% 5% 5%;
 }
 #stokProdQuan {
     margin-bottom: 2px;
@@ -26,4 +26,13 @@ tfoot {
 
 #dateReportForm {
     margin-right: 80%;
+}
+
+th,
+td {
+    text-align: center !important;
+}
+
+td {
+    padding: 5px !important;
 }

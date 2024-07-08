@@ -5,8 +5,6 @@
 @endsection
 
 @section('konten')
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
-
     <div class="page-content">
         @if ($errors->has('error'))
             <div class="alert alert-danger">
@@ -18,7 +16,6 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
         <div style="margin-bottom: 10px">
-            {{-- <a href="category/create" class="btn btn-success">Add New Data</a> --}}
             <a href="#modalCreate" data-toggle="modal" class="btn btn-info">Tambah produk baru</a>
             <a href="#modalEditProduct" data-toggle="modal" class="btn btn-info" onclick="getDeleteProductList()">Lihat Data
                 Yang Dihapus</a>
@@ -136,21 +133,29 @@
             $('#listProduct').DataTable({
                 responsive: true,
                 "pagingType": "full_numbers",
+
                 lengthMenu: [
                     [5, 10, 25, 50, -1],
                     [5, 10, 25, 50, 'All']
                 ],
 
+                order: [
+                    [1, 'asc']
+                ],
+
                 columnDefs: [{
                     className: 'dtr-control',
-                    orderable: false,
-                    target: 0
+                    target: '_all',
+                    orderable: false
                 }],
                 responsive: {
                     details: {
                         type: 'column',
                         target: 'tr'
                     }
+                },
+                language: {
+                    emptyTable: 'Tidak ada data produk'
                 },
             });
         });

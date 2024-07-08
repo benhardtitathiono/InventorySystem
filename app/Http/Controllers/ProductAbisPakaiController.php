@@ -53,9 +53,14 @@ class ProductAbisPakaiController extends Controller
     {
         //
         // dd($request);
-        $idProd = Carbon::now(
-            'Asia/Jakarta'
-        )->format('Ymd') . rand(10, 99);
+        do {
+            $idProd = Carbon::now(
+                'Asia/Jakarta'
+            )->format('Ymd') . rand(10, 99);
+        } while (
+            ProductAbisPakai::where('id', $idProd)->exists()
+        );
+
         $pap = new ProductAbisPakai();
         $pap->id = $idProd;
         $pap->nama_barang = $request->get('nameProduct');
@@ -138,7 +143,7 @@ class ProductAbisPakaiController extends Controller
             )->format('Y-m-d H:i:s');
             return redirect()->route('product.index')->with('message', 'Produk ' . $pap->nama_barang . ' berhasil dihapus');
         } catch (\PDOException $error) {
-            $msg = "Data gagal dihapus. pastikan kembali tidak ada data yang berelasi sebelum dihapus";
+            $msg = "Data gagal dihapus. pastikan kembali tidak ada data yang terhubung sebelum dihapus";
             return redirect()->route('product.index')->with('message', $msg);
         }
     }
@@ -148,6 +153,10 @@ class ProductAbisPakaiController extends Controller
         $pap = ProductAbisPakai::withTrashed()->find($id);
         if ($pap) {
             $pap->restore();
+            $pap->updated_at
+                = Carbon::now(
+                    'Asia/Jakarta'
+                )->format('Y-m-d H:i:s');
             // dd($pap);
             return redirect()->route('product.index')->with('message', 'Produk dengan id ' . $pap->id . " - " . $pap->nama_barang . ' berhasil dipulihkan');
         } else {

@@ -118,6 +118,11 @@
                             <input type="date" class="form-control" name="dateExProd" id="dateExProd"
                                 aria-describedby="dateExHelp"
                                 min="{{ \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d') }}">
+
+                            <select name="tipeBarang" id="tipeBarang" class="form-control" aria-describedby="tipeHelp">
+                                <option value="Poli Gigi">Poli Gigi</option>
+                                <option value="Umum">Umum</option>
+                            </select>
                         </div>
                 </div>
                 <div class="modal-footer">

@@ -69,7 +69,7 @@
                         </tr>
                     @endforeach
                 @else
-                    <td style="text-align: center; font-size:20px; font-weight:bold;" colspan="7">Tidak ada Produk
+                    <td style="text-align: center; font-size:20px; font-weight:bold;" colspan="8">Tidak ada Produk
                     </td>
                 @endif
 
@@ -134,6 +134,7 @@
         $(document).ready(function() {
             $('#listProduct').DataTable({
                 responsive: true,
+
                 "pagingType": "full_numbers",
 
                 lengthMenu: [
@@ -148,16 +149,23 @@
                 columnDefs: [{
                     className: 'dtr-control',
                     target: '_all',
-                    orderable: false
+                    orderable: true
                 }],
+
                 responsive: {
                     details: {
                         type: 'column',
                         target: 'tr'
                     }
                 },
+
                 language: {
-                    emptyTable: 'Tidak ada data produk'
+                    emptyTable: 'Tidak ada data produk',
+                    info: "Tampilan _START_ sampai _END_ dari _TOTAL_ data",
+                    infoEmpty: 'Tidak ada data produk',
+                    infoFiltered: "(Pencarian dari _MAX_ total data)",
+                    lengthMenu: "Tampilkan _MENU_ Data",
+                    zeroRecords: 'Tidak ada data produk'
                 },
             });
         });

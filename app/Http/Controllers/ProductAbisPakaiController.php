@@ -89,7 +89,7 @@ class ProductAbisPakaiController extends Controller
         ]);
         $b->save();
 
-        return redirect()->route('product.index')->with('message', 'Sukses membuat Produk Baru! Silahkan cek produk ' . $request->get('nameProd') . ' untuk validasi');
+        return redirect()->route('product.index')->with('message', 'Sukses Membuat Produk Baru! Silahkan cek produk ' . $request->get('nameProd') . ' untuk validasi');
     }
 
     /**

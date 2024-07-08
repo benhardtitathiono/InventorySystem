@@ -60,7 +60,7 @@
                         </tr>
                     @endforeach
                 @else
-                    <td style="text-align: center; font-size:20px; font-weight:bold;" colspan="5">Tidak ada Produk
+                    <td style="text-align: center; font-size:20px; font-weight:bold;" colspan="5">Tidak ada identitas
                     </td>
                 @endif
 
@@ -126,7 +126,7 @@
 
                 columnDefs: [{
                     className: 'dtr-control',
-                    orderable: false,
+                    orderable: true,
                     target: '_all'
                 }],
 
@@ -138,7 +138,12 @@
                 },
 
                 language: {
-                    emptyTable: 'Tidak ada data identitas'
+                    emptyTable: 'Tidak ada data identitas',
+                    info: "Tampilan _START_ sampai _END_ dari _TOTAL_ data",
+                    infoEmpty: 'Tidak ada data identitas',
+                    infoFiltered: "(Pencarian dari _MAX_ total data)",
+                    lengthMenu: "Tampilkan _MENU_ Data",
+                    zeroRecords: 'Tidak ada data identitas'
                 },
             });
         });

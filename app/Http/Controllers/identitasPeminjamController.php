@@ -51,6 +51,12 @@ class identitasPeminjamController extends Controller
         $identity = new IdentitasPeminjam();
         $identity->id = $idIdentitas;
         $identity->nama = $request->get('nameIdentitas');
+        $identity->created_at = Carbon::now(
+            'Asia/Jakarta'
+        )->format('Y-m-d H:i:s');
+        $identity->updated_at = Carbon::now(
+            'Asia/Jakarta'
+        )->format('Y-m-d H:i:s');
         $identity->save();
 
         return redirect()->route('identitas.index')->with('message', 'Sukses Membuat Identitas Baru! Silahkan cek identitas ' . $request->get('nameProd') . ' untuk validasi');

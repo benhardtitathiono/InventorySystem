@@ -12,7 +12,7 @@ class Peminjaman extends Model
 
     protected $table = 'peminjaman';
 
-    public function detailPinjam()
+    public function detailBarang()
     {
         return $this->belongsToMany(
             PeminjamanController::class,

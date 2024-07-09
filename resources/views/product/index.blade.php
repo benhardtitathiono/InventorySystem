@@ -17,8 +17,12 @@
         @endif
         <div style="margin-bottom: 10px">
             <a href="#modalCreate" data-toggle="modal" class="btn btn-info">Tambah produk baru</a>
-            <a href="#modalEditProduct" data-toggle="modal" class="btn btn-info" onclick="getDeleteProductList()">Lihat Data
+            <a href="#modalEditProduct" data-toggle="modal" class="btn btn-info"
+                onclick="getDeleteProductList('@php echo $_GET['kategori'] @endphp')">Lihat Data
                 Yang Dihapus</a>
+            {{-- <a href="#modalEditProduct" data-toggle="modal" class="btn btn-info"
+                onclick="getDeleteProductList(@php echo $_GET['kategori'] @endphp)">Lihat Data
+                Yang Dihapus</a> --}}
 
         </div>
 
@@ -203,10 +207,13 @@
             });
         }
 
-        function getDeleteProductList() {
+        function getDeleteProductList(tipe) {
             $.ajax({
-                type: 'GET',
-                url: '{{ route('product.getDeleteProductList') }}',
+                type: 'POST',
+                url: "{{ url('productabispakaiterhapus') }}/" + tipe,
+                data: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                },
                 success: function(data) {
                     $('#modalContent').html(data.msg)
                 }

@@ -167,7 +167,6 @@ License: You must have a valid license purchased only from themeforest(the above
                             <span class="title">Dashboard</span>
                             <span class="selected"></span>
                         </a>
-                    </li>
                     <li>
                         <a href="javascript:;">
                             <i class="icon-puzzle"></i>
@@ -177,23 +176,55 @@ License: You must have a valid license purchased only from themeforest(the above
                         <ul class="sub-menu">
                             <li>
                                 <a href="javascript:;">
-                                    <span class="title">Produk</span>
+                                    <span class="title">Manajemen</span>
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
                                     <li>
-                                        <a href="{{ url('productabispakai') }}">
+                                        <a href="javascript:;">
                                             <i class="icon-list"></i>
-                                            Barang abis Pakai</a>
+                                            Barang Abis Pakai
+                                            <span class="arrow"></span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                <form action="{{ url('productabispakai') }}" method="get">
+                                                    <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                        Umum
+                                                        <input type="hidden" name="kategori" value="Umum">
+                                                    </a>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form action="{{ url('productabispakai') }}" method="get">
+                                                    <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                        Poli Gigi
+                                                        <input type="hidden" name="kategori" value="Poli Gigi">
+                                                    </a>
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </li>
                                     <li>
-                                        <a href="{{ url('productpinjam') }}">
-                                            <i class="icon-book-open"></i>
-                                            Barang peminjaman</a>
+                                        <a href="javascript:;">
+                                            <i class="icon-list"></i>
+                                            Barang Pinjam
+                                            <span class="arrow"></span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                <a href="{{ url('productpinjam') }}">
+                                                    Umum</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('productpinjam') }}">
+                                                    Poli Gigi</a>
+                                            </li>
+                                        </ul>
                                     </li>
                                     <li>
                                         <a href="{{ url('identitaspeminjam') }}">
-                                            <i class="icon-book-open"></i>
+                                            <i class="icon-list"></i>
                                             Identitas Peminjam</a>
                                     </li>
                                 </ul>
@@ -212,24 +243,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <li>
                                         <a href="{{ url('back/albumProduct') }}">
                                             <i class="icon-book-open"></i>
-                                            Laporan harian Barang pinjaman</a>
+                                            Laporan harian barang pinjaman</a>
                                     </li>
                                 </ul>
                             </li>
-                            {{-- <li>
-                                <a href="{{ url('back/transaction') }}">
-
-                                    Transaction</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('back/member') }}">
-
-                                    Member</a>
-                            </li> --}}
-
                         </ul>
                     </li>
-
+                    </li>
 
                 </ul>
                 <!-- END SIDEBAR MENU -->

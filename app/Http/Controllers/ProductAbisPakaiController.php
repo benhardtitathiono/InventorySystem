@@ -15,16 +15,28 @@ class ProductAbisPakaiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $tipe)
     {
         //
-        $pap = ProductAbisPakai::orderBy('nama_barang')->get();
+        // dd($tipe);
+        $pap = ProductAbisPakai::where('tipe', $tipe->get('kategori'))->orderBy('nama_barang')->get();
         return view('product.index', ['pap' => $pap]);
     }
 
-    function indexdeleted()
+    // public function indexdeleted($tipe)
+    // {
+    //     $pap = ProductAbisPakai::where('tipe', $tipe)::onlyTrashed()->get();
+    //     return response()->json(
+    //         array(
+    //             'status' => 'oke',
+    //             'msg' => view('product.getDeleteProductList', compact('pap'))->render()
+    //         )
+    //     );
+    // }
+    function indexdeleted($tipe)
     {
-        $pap = ProductAbisPakai::onlyTrashed()->get();
+        // dd($tipe);
+        $pap = ProductAbisPakai::onlyTrashed()->where('tipe', $tipe)->get();
         return response()->json(
             array(
                 'status' => 'oke',

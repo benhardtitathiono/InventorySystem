@@ -20,11 +20,12 @@
 
         <label class="stok" for="stok">Stok</label><br>
         Stok Sekarang: {{ $pap->jumlah }}<input class="form-control" type="number" name="stokProdQuan"
-            id="stokProdQuan">
+            id="stokProdQuan" min="1" value="1">
 
         <label for="tgglEx">Tanggal Kadaluwarsa</label>
         <input type="date" class="form-control" name="dateExProd" id="dateExProd" aria-describedby="dateExHelp"
-            min="{{ \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d') }}">
+            min="{{ \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d') }}"
+            value="{{ \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d') }}">
 
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>

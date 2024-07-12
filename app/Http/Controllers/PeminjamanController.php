@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
+use App\Models\ProductAbisPakai;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PeminjamanController extends Controller
 {
@@ -12,9 +14,22 @@ class PeminjamanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $tipe)
     {
         //
+        // $pap = ProductAbisPakai::where('tipe', $tipe->get('kategori'))->orderBy('nama_barang')->get();
+        // return view('peminjaman.barangKembali', ['pap' => $pap]);
+        // $pap = Peminjaman::where('tipe', $tipe->get('kategori'))->orderBy('created_at')->get();
+        $pinjam = DB::table('peminjaman as p')
+            ->join('detail_peminjam as dp', 'p.id', '=', 'dp.peminjaman_id')
+            ->join('barang_pinjam as bp', 'dp.product_pinjam_id', '=', 'bp.id')
+            ->join('identitas_peminjam as ip', 'p.identitas_peminjam_id', '=', 'ip.id')
+            ->where('bp.tipe', $tipe->kategori)
+            ->groupBy('pinjamID', 'ip.nama', 'p.created_at', 'p.updated_at')
+            ->select('p.id as pinjamID', 'ip.nama', 'p.created_at', 'p.updated_at')
+            ->get();
+        // dd($pinjam);
+        return view('peminjaman.barangKembali', ['pinjam' => $pinjam]);
     }
 
     /**
@@ -81,5 +96,29 @@ class PeminjamanController extends Controller
     public function destroy(Peminjaman $peminjaman)
     {
         //
+    }
+    function statuskembali(Request $request)
+    {
+        $idPinjam = $request->id;
+        $peminjaman = Peminjaman::find($idPinjam);
+        // dd($peminjaman->detailBarang);
+        return response()->json(
+            array(
+                'status' => 'oke',
+                'msg' => view('peminjaman.barangKembaliDetail', compact("peminjaman", "idPinjam"))->render()
+            )
+        );
+    }
+    function updatestatuskembali(Request $request)
+    {
+        $idPinjam = $request->query->keys();
+
+        $peminjaman = Peminjaman::find($idPinjam);
+        if (!$peminjaman->exists()) {
+            for ($i = 1; $i < $request->totProd; $i++) {
+            }
+        }
+
+        dd($request);
     }
 }

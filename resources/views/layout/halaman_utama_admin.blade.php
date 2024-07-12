@@ -212,13 +212,44 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <span class="arrow"></span>
                                         </a>
                                         <ul class="sub-menu">
+                                            <form action="{{ url('productpinjam') }}" method="get">
+                                                <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                    Umum
+                                                    <input type="hidden" name="kategori" value="Umum">
+                                                </a>
+                                            </form>
                                             <li>
-                                                <a href="{{ url('productpinjam') }}">
-                                                    Umum</a>
+                                                <form action="{{ url('productpinjam') }}" method="get">
+                                                    <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                        Poli Gigi
+                                                        <input type="hidden" name="kategori" value="Poli Gigi">
+                                                    </a>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;">
+                                            <i class="icon-list"></i>
+                                            Barang Pinjam Kembali
+                                            <span class="arrow"></span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                <form action="{{ url('barangkembali') }}" method="get">
+                                                    <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                        Umum
+                                                        <input type="hidden" name="kategori" value="Umum">
+                                                    </a>
+                                                </form>
                                             </li>
                                             <li>
-                                                <a href="{{ url('productpinjam') }}">
-                                                    Poli Gigi</a>
+                                                <form action="{{ url('barangkembali') }}" method="get">
+                                                    <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                        Poli Gigi
+                                                        <input type="hidden" name="kategori" value="Poli Gigi">
+                                                    </a>
+                                                </form>
                                             </li>
                                         </ul>
                                     </li>

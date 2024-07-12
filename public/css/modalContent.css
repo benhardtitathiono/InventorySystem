@@ -36,3 +36,9 @@ td {
 td {
     padding: 5px !important;
 }
+
+.dt-empty {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}

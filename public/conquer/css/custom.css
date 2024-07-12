@@ -5,3 +5,6 @@ ul.sub-menu {
 a {
     color: white;
 }
+#borrowForm {
+    width: 100%;
+}

@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\BarangPinjamController;
-use App\Http\Controllers\identitasPeminjamController;
+use App\Http\Controllers\IdentitasPeminjamController;
+use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProductAbisPakaiController;
+use App\Models\Peminjaman;
 use App\Models\ProductAbisPakai;
 use Illuminate\Support\Facades\Route;
 
@@ -27,26 +29,27 @@ Route::post('productabispakai/updatestok', [ProductAbisPakaiController::class, '
 Route::post('/updateStock', [ProductAbisPakaiController::class, "updateStock"])->name('product.updateStock');
 Route::post('productabispakai/updatestokout', [ProductAbisPakaiController::class, 'getUpdateStokOutForm'])->name('product.getUpdateStokOutForm');
 Route::post('/updateStockOut', [ProductAbisPakaiController::class, "updateStockOut"])->name('product.updateStockOut');
-route::get('/productabispakaiterhapus', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
+route::post('/productabispakaiterhapus/{tipe}', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
 Route::post('/productabispakai/delete/{id}', [ProductAbisPakaiController::class, "destroy"])->name('product.destroy');
 Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::class, "restore"])->name('product.restore');
 
 Route::post('/logProduct', [ProductAbisPakaiController::class, 'logProduct'])->name('log.getLogProduct');
 route::get('/laporanharianbarangabispakai', [ProductAbisPakaiController::class, 'laporanharianbap'])->name('log.logpap');
 
-route::get('/identitaspeminjam', [identitasPeminjamController::class, 'index'])->name('identitas.index');
-Route::post('/identitaspeminjambaru', [identitasPeminjamController::class, "store"])->name('identitas.store');
-route::get('/identitaspeminjamterhapus', [identitasPeminjamController::class, 'identitasdeleted'])->name('identitas.getDeleteIdentitasList');
-Route::post('/identitaspeminjam/delete/{id}', [identitasPeminjamController::class, "destroy"])->name('identitas.destroy');
-Route::post('/identitaspeminjam/undelete/{id}', [identitasPeminjamController::class, "restore"])->name('identitas.restore');
+route::get('/identitaspeminjam', [IdentitasPeminjamController::class, 'index'])->name('identitas.index');
+Route::post('/identitaspeminjambaru', [IdentitasPeminjamController::class, "store"])->name('identitas.store');
+route::get('/identitaspeminjamterhapus', [IdentitasPeminjamController::class, 'identitasdeleted'])->name('identitas.getDeleteIdentitasList');
+Route::post('/identitaspeminjam/delete/{id}', [IdentitasPeminjamController::class, "destroy"])->name('identitas.destroy');
+Route::post('/identitaspeminjam/undelete/{id}', [IdentitasPeminjamController::class, "restore"])->name('identitas.restore');
 
 route::get('/productpinjam', [BarangPinjamController::class, 'index'])->name('productpinjam.index');
+Route::post('/productpinjambaru', [BarangPinjamController::class, "store"])->name('productpinjam.store');
+Route::post('productpinjam/pinjam', [BarangPinjamController::class, 'getBorrowForm'])->name('productpinjam.getBorrowForm');
+Route::post('/pinjam', [BarangPinjamController::class, "borrowProduct"])->name('productpinjam.borrowProduct');
+route::post('/productpinjamterhapus/{tipe}', [BarangPinjamController::class, 'indexdeleted'])->name('productpinjam.getDeleteBarangList');
+Route::post('/productpinjam/delete/{id}', [BarangPinjamController::class, "destroy"])->name('productpinjam.destroy');
+Route::post('/productpinjam/undelete/{id}', [BarangPinjamController::class, "restore"])->name('productpinjam.restore');
 
-// route::get('/productabispakaiterhapus', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
-// Route::post('/productbaru', [ProductAbisPakaiController::class, "store"])->name('product.store');
-// Route::post('productabispakai/updatestok', [ProductAbisPakaiController::class, 'getUpdateStokForm'])->name('product.getUpdateStokForm');
-// Route::post('/updateStock', [ProductAbisPakaiController::class, "updateStock"])->name('product.updateStock');
-// Route::post('productabispakai/updatestokout', [ProductAbisPakaiController::class, 'getUpdateStokOutForm'])->name('product.getUpdateStokOutForm');
-// Route::post('/updateStockOut', [ProductAbisPakaiController::class, "updateStockOut"])->name('product.updateStockOut');
-// Route::post('/productabispakai/delete/{id}', [ProductAbisPakaiController::class, "destroy"])->name('product.destroy');
-// Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::class, "restore"])->name('product.restore');
+route::get('/barangkembali', [PeminjamanController::class, 'index'])->name('barangkembali.index');
+route::post('/barangkembali/status', [PeminjamanController::class, 'statuskembali'])->name('barangkembali.status');
+route::post('/barangkembali/updatestatus', [PeminjamanController::class, 'updatestatuskembali'])->name('barangkembali.updatestatus');

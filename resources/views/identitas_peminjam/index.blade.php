@@ -59,9 +59,6 @@
                             </td>
                         </tr>
                     @endforeach
-                @else
-                    <td style="text-align: center; font-size:20px; font-weight:bold;" colspan="5">Tidak ada identitas
-                    </td>
                 @endif
 
             </tbody>
@@ -125,6 +122,8 @@
                 ],
 
                 columnDefs: [{
+                    // data: null,
+                    // defaultContent: 'Tidak ada data identitas',
                     className: 'dtr-control',
                     orderable: true,
                     target: '_all'

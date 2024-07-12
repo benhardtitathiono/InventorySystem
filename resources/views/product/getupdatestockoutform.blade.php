@@ -41,7 +41,7 @@
 
         <label class="stok" for="stok">Stok</label><br>
         Stok Sekarang: {{ $pap->jumlah }}
-        <input class="form-control" type="number" name="stokProdQuan" id="stokProdQuan" max="{{ $maxValue }}">
+        <input class="form-control" type="number" name="stokProdQuan" id="stokProdQuan" min="1" max="{{ $maxValue }}" value="1">
 
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>

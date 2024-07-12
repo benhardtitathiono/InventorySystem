@@ -23,16 +23,6 @@ class ProductAbisPakaiController extends Controller
         return view('product.index', ['pap' => $pap]);
     }
 
-    // public function indexdeleted($tipe)
-    // {
-    //     $pap = ProductAbisPakai::where('tipe', $tipe)::onlyTrashed()->get();
-    //     return response()->json(
-    //         array(
-    //             'status' => 'oke',
-    //             'msg' => view('product.getDeleteProductList', compact('pap'))->render()
-    //         )
-    //     );
-    // }
     function indexdeleted($tipe)
     {
         // dd($tipe);
@@ -85,23 +75,25 @@ class ProductAbisPakaiController extends Controller
         $pap->updated_at = Carbon::now(
             'Asia/Jakarta'
         )->format('Y-m-d H:i:s');
+        $pap->tipe
+            = $request->get('tipeProd');
         $pap->save();
 
         $idBatch = $idProd . (int)Carbon::now('Asia/Jakarta')->format('Ymd');
         $b = new Batch();
         $b->id = $idBatch;
-        $b->tanggal_masuk = Carbon::now()->format('Y-m-d');
+        $b->tanggal_masuk = Carbon::now('Asia/Jakarta')->format('Y-m-d');
         $b->tanggal_kadaluwarsa = $request->get('dateExProd');
         $b->jumlah = $request->get('jumlahProd');
         $b->save();
 
         $b->logBatch()->attach($idProd, [
             "quantity_in" => $request->get('jumlahProd'),
-            "tanggal" => Carbon::now()->format('Y-m-d')
+            "tanggal" => Carbon::now('Asia/Jakarta')->format('Y-m-d')
         ]);
         $b->save();
 
-        return redirect()->route('product.index')->with('message', 'Sukses Membuat Produk Baru! Silahkan cek produk ' . $request->get('nameProd') . ' untuk validasi');
+        return redirect()->to('productabispakai?kategori=' . $pap->tipe)->with('message', 'Sukses Membuat Produk Baru! Silahkan cek produk ' . $request->get('nameProd') . ' untuk validasi');
     }
 
     /**
@@ -149,6 +141,7 @@ class ProductAbisPakaiController extends Controller
         //
         try {
             $pap = ProductAbisPakai::find($ProductAbisPakai);
+            $kategori = $pap->tipe;
             $pap->delete();
             $pap->deleted_at = Carbon::now(
                 'Asia/Jakarta'
@@ -156,16 +149,17 @@ class ProductAbisPakaiController extends Controller
             $pap->updated_at = Carbon::now(
                 'Asia/Jakarta'
             )->format('Y-m-d H:i:s');
-            return redirect()->route('product.index')->with('message', 'Produk ' . $pap->nama_barang . ' berhasil dihapus');
+            return redirect()->to('productabispakai?kategori=' . $kategori)->with('message', 'Produk ' . $pap->nama_barang . ' berhasil dihapus');
         } catch (\PDOException $error) {
             $msg = "Data gagal dihapus. pastikan kembali tidak ada data yang terhubung sebelum dihapus";
-            return redirect()->route('product.index')->with('message', $msg);
+            return redirect()->to('productabispakai?kategori=' . $kategori)->with('message', $msg);
         }
     }
 
     public function restore($id)
     {
         $pap = ProductAbisPakai::withTrashed()->find($id);
+        $kategori = $pap->tipe;
         if ($pap) {
             $pap->restore();
             $pap->updated_at
@@ -173,9 +167,9 @@ class ProductAbisPakaiController extends Controller
                     'Asia/Jakarta'
                 )->format('Y-m-d H:i:s');
             // dd($pap);
-            return redirect()->route('product.index')->with('message', 'Produk dengan id ' . $pap->id . " - " . $pap->nama_barang . ' berhasil dipulihkan');
+            return redirect()->to('productabispakai?kategori=' . $kategori)->with('message', 'Produk dengan id ' . $pap->id . " - " . $pap->nama_barang . ' berhasil dipulihkan');
         } else {
-            return redirect()->route('product.index')->with('message', 'Produk tidak ditemukan');
+            return redirect()->to('productabispakai?kategori=' . $kategori)->with('message', 'Produk tidak ditemukan');
         }
     }
 
@@ -214,14 +208,14 @@ class ProductAbisPakaiController extends Controller
                 $product->save();
             }
             $b->id = $id . (int)Carbon::now('Asia/Jakarta')->format('YmdHis');
-            $b->tanggal_masuk = Carbon::now()->format('Y-m-d');
+            $b->tanggal_masuk = Carbon::now('Asia/Jakarta')->format('Y-m-d');
             $b->tanggal_kadaluwarsa = $dateEx;
             $b->jumlah = $jumlah;
             $b->save();
 
             $b->logBatch()->attach($id, [
                 "quantity_in" => $jumlah,
-                "tanggal" => Carbon::now()->format('Y-m-d')
+                "tanggal" => Carbon::now('Asia/Jakarta')->format('Y-m-d')
             ]);
             $b->save();
 
@@ -268,7 +262,7 @@ class ProductAbisPakaiController extends Controller
 
             $b->logBatch()->attach($id, [
                 "quantity_out" => $jumlah,
-                "tanggal" => Carbon::now()->format('Y-m-d')
+                "tanggal" => Carbon::now('Asia/Jakarta')->format('Y-m-d')
             ]);
             $b->save();
 

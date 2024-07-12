@@ -6,7 +6,7 @@ use App\Models\IdentitasPeminjam;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class identitasPeminjamController extends Controller
+class IdentitasPeminjamController extends Controller
 {
     /**
      * Display a listing of the resource.

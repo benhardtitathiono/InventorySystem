@@ -45,7 +45,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if (isset($pap))
+                @if (isset($pap) && count($pap) > 0)
                     @foreach ($pap as $p)
                         <tr>
                             <td>{{ $p->id }}</td>
@@ -72,9 +72,6 @@
                             </td>
                         </tr>
                     @endforeach
-                @else
-                    <td style="text-align: center; font-size:20px; font-weight:bold;" colspan="8">Tidak ada Produk
-                    </td>
                 @endif
 
             </tbody>
@@ -123,7 +120,7 @@
                                 aria-describedby="dateExHelp"
                                 min="{{ \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d') }}">
 
-                            <select name="tipeBarang" id="tipeBarang" class="form-control" aria-describedby="tipeHelp">
+                            <select name="tipeProd" id="tipeProd" class="form-control" aria-describedby="tipeHelp">
                                 <option value="Poli Gigi">Poli Gigi</option>
                                 <option value="Umum">Umum</option>
                             </select>
@@ -156,6 +153,8 @@
                 ],
 
                 columnDefs: [{
+                    // data: null,
+                    // defaultContent: 'Tidak ada data produk',
                     className: 'dtr-control',
                     target: '_all',
                     orderable: true

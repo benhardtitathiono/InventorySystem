@@ -18,8 +18,6 @@ class CreateTableBorrowed extends Migration
 
             $table->unsignedBigInteger('identitas_peminjam_id')->required();
             $table->foreign('identitas_peminjam_id')->references('id')->on('identitas_peminjam');
-
-            $table->date('tanggal_pinjam');
             $table->timestamps();
         });
     }

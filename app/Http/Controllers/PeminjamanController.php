@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Peminjaman;
 use App\Models\ProductAbisPakai;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -111,14 +112,21 @@ class PeminjamanController extends Controller
     }
     function updatestatuskembali(Request $request)
     {
+        // dd($request);
+
         $idPinjam = $request->query->keys();
 
         $peminjaman = Peminjaman::find($idPinjam);
-        if (!$peminjaman->exists()) {
+        if (!$peminjaman) {
             for ($i = 1; $i < $request->totProd; $i++) {
+                $prodID = $request->prodID . $i;
+                $statKembali = $request->statKembali . $i;
+                $peminjaman->detailBarang()->updateExistingPivot($prodID, [
+                    'status_barang_kembali' => $statKembali,
+                    'updated_at' => Carbon::now('Asia/Jakarta')->format('Y-m-d')
+                ]);
             }
+            return redirect()->back()->with('message', 'Sukses menyelesaikan pinjaman! Silahkan cek peminjaman ' . $idPinjam . ' untuk validasi');
         }
-
-        dd($request);
     }
 }

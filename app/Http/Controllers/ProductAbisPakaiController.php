@@ -7,6 +7,7 @@ use App\Models\ProductAbisPakai;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class ProductAbisPakaiController extends Controller
 {
@@ -19,7 +20,7 @@ class ProductAbisPakaiController extends Controller
     {
         $this->middleware('role:dokter')->only('product.index,
         product.getupdatestockoutform'); // akses barang untuk dokter
-        
+
         $this->middleware('role:staf')->only('product.index,
         product.getupdatestockform,
         product.getupdatestockoutform,
@@ -44,10 +45,6 @@ class ProductAbisPakaiController extends Controller
         // dd($tipe);
         $pap = ProductAbisPakai::where('tipe', $tipe->get('kategori'))->orderBy('nama_barang')->get();
         return view('product.index', ['pap' => $pap]);
-    }
-
-    public function search(SearchRequest $request){
-        
     }
 
     function indexdeleted($tipe)
@@ -295,7 +292,7 @@ class ProductAbisPakaiController extends Controller
 
     function updateStockOut(Request $request)
     {
-        
+
         if (Gate::denies('staf')) {
             abort(403);
         }

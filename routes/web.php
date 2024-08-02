@@ -33,7 +33,7 @@ Route::post('productabispakai/updatestok', [ProductAbisPakaiController::class, '
 Route::post('/updateStock', [ProductAbisPakaiController::class, "updateStock"])->name('product.updateStock');
 Route::post('productabispakai/updatestokout', [ProductAbisPakaiController::class, 'getUpdateStokOutForm'])->name('product.getUpdateStokOutForm');
 Route::post('/updateStockOut', [ProductAbisPakaiController::class, "updateStockOut"])->name('product.updateStockOut');
-route::post('/productabispakaiterhapus/{id}', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
+route::post('/productabispakaiterhapus/{tipe}', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
 Route::post('/productabispakai/delete/{id}', [ProductAbisPakaiController::class, "destroy"])->name('product.destroy');
 Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::class, "restore"])->name('product.restore');
 
@@ -56,7 +56,7 @@ route::get('/productpinjam', [BarangPinjamController::class, 'index'])->name('pr
 Route::post('/productpinjambaru', [BarangPinjamController::class, "store"])->name('productpinjam.store');
 Route::post('productpinjam/pinjam', [BarangPinjamController::class, 'getBorrowForm'])->name('productpinjam.getBorrowForm');
 Route::post('/pinjam', [BarangPinjamController::class, "borrowProduct"])->name('productpinjam.borrowProduct');
-route::post('/productpinjamterhapus/{id}', [BarangPinjamController::class, 'indexdeleted'])->name('productpinjam.getDeleteBarangList');
+route::post('/productpinjamterhapus/{tipe}', [BarangPinjamController::class, 'indexdeleted'])->name('productpinjam.getDeleteBarangList');
 Route::post('/productpinjam/delete/{id}', [BarangPinjamController::class, "destroy"])->name('productpinjam.destroy');
 Route::post('/productpinjam/undelete/{id}', [BarangPinjamController::class, "restore"])->name('productpinjam.restore');
 

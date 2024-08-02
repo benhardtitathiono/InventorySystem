@@ -65,12 +65,9 @@
                                 @can('staf')
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getLogProduct({{ $p->id }})">Log Stok</a>
-<<<<<<< Updated upstream
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getStokBatchProduct({{ $p->id }})">Stok Batch</a>
-=======
                                 @endcan
->>>>>>> Stashed changes
                                 <form method="POST" action="{{ route('product.destroy', $p->id) }}">
                                     @csrf
                                     @can('staf')
@@ -87,7 +84,7 @@
             </tbody>
         </table>
 
-        
+
         <div class="modal fade" id="modalEditProduct" tabindex="-1" role="basic" aria-hidden="true">
             <div class="modal-dialog modal-wide">
                 <div class="modal-content">
@@ -97,7 +94,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
 
@@ -106,10 +103,10 @@
         @can('staf')
             <div class="modal-content">
                 <div class="modal-header">
-                    
+
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">Tambah produk baru</h4>
-                    
+
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="{{ route('product.store') }}" enctype="multipart/form-data">
@@ -158,7 +155,7 @@
         document.getElementById('dt-search-0').addEventListener('click', function() {
             var input = document.getElementById('search-input').value;
             var regex = /^[a-zA-Z0-9\s\-\.]+$/;
-            
+
             if (!regex.test(input)) {
                 document.getElementById('error-message').textContent = 'Input hanya boleh mengandung huruf, angka, spasi, tanda sambung, dan titik.';
             } else {

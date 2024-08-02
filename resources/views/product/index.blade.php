@@ -65,12 +65,9 @@
                                 @can('staf')
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getLogProduct({{ $p->id }})">Log Stok</a>
-<<<<<<< Updated upstream
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getStokBatchProduct({{ $p->id }})">Stok Batch</a>
-=======
                                 @endcan
->>>>>>> Stashed changes
                                 <form method="POST" action="{{ route('product.destroy', $p->id) }}">
                                     @csrf
                                     @can('staf')

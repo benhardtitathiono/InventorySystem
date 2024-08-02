@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BarangPinjamController;
+use App\Http\Controllers\BatchController;
 use App\Http\Controllers\IdentitasPeminjamController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProductAbisPakaiController;
@@ -33,8 +34,14 @@ route::post('/productabispakaiterhapus/{tipe}', [ProductAbisPakaiController::cla
 Route::post('/productabispakai/delete/{id}', [ProductAbisPakaiController::class, "destroy"])->name('product.destroy');
 Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::class, "restore"])->name('product.restore');
 
+route::get('/batchprod', [BatchController::class, 'index'])->name('batch.index');
+// Route::post('/batchprod/delete/{id}', [BatchController::class, "destroy"])->name('batch.destroy');
+// Route::post('/productabispakai/undelete/{id}', [BatchController::class, "restore"])->name('batch.restore');
+
 Route::post('/logProduct', [ProductAbisPakaiController::class, 'logProduct'])->name('log.getLogProduct');
+Route::post('/stokBatchProduct', [ProductAbisPakaiController::class, 'stokBatchProduct'])->name('log.getStokBatchProduct');
 route::get('/laporanharianbarangabispakai', [ProductAbisPakaiController::class, 'laporanharianbap'])->name('log.logpap');
+Route::post('/logBatch', [BatchController::class, 'logBatch'])->name('log.getLogBatchProduct');
 
 route::get('/identitaspeminjam', [IdentitasPeminjamController::class, 'index'])->name('identitas.index');
 Route::post('/identitaspeminjambaru', [IdentitasPeminjamController::class, "store"])->name('identitas.store');

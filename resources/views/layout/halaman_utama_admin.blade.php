@@ -107,19 +107,18 @@ License: You must have a valid license purchased only from themeforest(the above
                         <li>
                             <a href="extra_profile.html"><i class="fa fa-user"></i> My Profile</a>
                         </li>
+                        
+                        
                         <li>
-                            <a href="page_calendar.html"><i class="fa fa-calendar"></i> My Calendar</a>
-                        </li>
-                        <li>
-                            <a href="page_inbox.html"><i class="fa fa-envelope"></i> My Inbox <span
-                                    class="badge badge-danger">
-                                    3 </span>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
                             </a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-tasks"></i> My Tasks <span class="badge badge-success">
-                                    7 </span>
-                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         </li>
                         <li class="divider">
                         </li>
@@ -205,6 +204,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             </li>
                                         </ul>
                                     </li>
+                                    @can('staf')
                                     <li>
                                         <a href="javascript:;">
                                             <i class="icon-list"></i>
@@ -283,8 +283,10 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <i class="icon-list"></i>
                                             Identitas Peminjam</a>
                                     </li>
+                                    @endcan
                                 </ul>
                             </li>
+                            @can('staf')
                             <li>
                                 <a href="javascript:;">
                                     <span class="title">Laporan</span>
@@ -303,6 +305,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </li>
                                 </ul>
                             </li>
+                            @endcan
                         </ul>
                     </li>
                     </li>

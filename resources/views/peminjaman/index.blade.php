@@ -152,6 +152,7 @@
                         target: 'tr'
                     }
                 },
+                
 
                 language: {
                     emptyTable: 'Tidak ada data barang',

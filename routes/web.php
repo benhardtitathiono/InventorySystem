@@ -19,18 +19,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Auth::routes();
 Route::get('/', function () {
-    return view('layout.halaman_utama_admin');
+    return redirect()->route('login');
 });
+Route::get('/home', function (){
+    return view('layout.halaman_utama_admin');
+})->name('home');
 
-route::get('/productabispakai', [ProductAbisPakaiController::class, 'index'])->name('product.index');
+route::get('/productabispakai', [ProductAbisPakaiController::class, 'index'])->name('product.index')->middleware('auth');
 Route::post('/productbaru', [ProductAbisPakaiController::class, "store"])->name('product.store');
 Route::post('productabispakai/updatestok', [ProductAbisPakaiController::class, 'getUpdateStokForm'])->name('product.getUpdateStokForm');
 Route::post('/updateStock', [ProductAbisPakaiController::class, "updateStock"])->name('product.updateStock');
 Route::post('productabispakai/updatestokout', [ProductAbisPakaiController::class, 'getUpdateStokOutForm'])->name('product.getUpdateStokOutForm');
 Route::post('/updateStockOut', [ProductAbisPakaiController::class, "updateStockOut"])->name('product.updateStockOut');
-route::post('/productabispakaiterhapus/{tipe}', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
+route::post('/productabispakaiterhapus/{id}', [ProductAbisPakaiController::class, 'indexdeleted'])->name('product.getDeleteProductList');
 Route::post('/productabispakai/delete/{id}', [ProductAbisPakaiController::class, "destroy"])->name('product.destroy');
 Route::post('/productabispakai/undelete/{id}', [ProductAbisPakaiController::class, "restore"])->name('product.restore');
 
@@ -53,10 +56,18 @@ route::get('/productpinjam', [BarangPinjamController::class, 'index'])->name('pr
 Route::post('/productpinjambaru', [BarangPinjamController::class, "store"])->name('productpinjam.store');
 Route::post('productpinjam/pinjam', [BarangPinjamController::class, 'getBorrowForm'])->name('productpinjam.getBorrowForm');
 Route::post('/pinjam', [BarangPinjamController::class, "borrowProduct"])->name('productpinjam.borrowProduct');
-route::post('/productpinjamterhapus/{tipe}', [BarangPinjamController::class, 'indexdeleted'])->name('productpinjam.getDeleteBarangList');
+route::post('/productpinjamterhapus/{id}', [BarangPinjamController::class, 'indexdeleted'])->name('productpinjam.getDeleteBarangList');
 Route::post('/productpinjam/delete/{id}', [BarangPinjamController::class, "destroy"])->name('productpinjam.destroy');
 Route::post('/productpinjam/undelete/{id}', [BarangPinjamController::class, "restore"])->name('productpinjam.restore');
 
 route::get('/barangkembali', [PeminjamanController::class, 'index'])->name('barangkembali.index');
 route::post('/barangkembali/status', [PeminjamanController::class, 'statuskembali'])->name('barangkembali.status');
 route::post('/barangkembali/updatestatus', [PeminjamanController::class, 'updatestatuskembali'])->name('barangkembali.updatestatus');
+
+// route::get('/productabispakaigigi', [ProductAbisPakaiController::class, 'indexdental'])->name('dental.index');
+// Route::post('/productbarugigi', [ProductAbisPakaiController::class, "storedental"])->name('dental.storedental');
+// Route::post('productabispakaigigi/updatestok', [ProductAbisPakaiController::class, 'getUpdateStokForm'])->name('dental.getUpdateStokForm');
+// Route::post('productabispakaigigi/updatestokout', [ProductAbisPakaiController::class, 'getUpdateStokOutForm'])->name('dental.getUpdateStokOutForm');
+
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

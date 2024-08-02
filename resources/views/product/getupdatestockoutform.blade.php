@@ -1,5 +1,10 @@
 <form method="POST" action="{{ route('product.updateStockOut', $pap->id) }}">
     @csrf
+<<<<<<< Updated upstream
+=======
+    @can('staf')
+    {{-- @method('PUT') --}}
+>>>>>>> Stashed changes
     <div class="form-group">
         <label for="idProd">ID produk</label>
         <input type="text" class="form-control" name="idProd" id="idProd" aria-describedby="idHelp"
@@ -57,3 +62,4 @@
         updateMaxValue(selectElement);
     }
 </script>
+    @endcan

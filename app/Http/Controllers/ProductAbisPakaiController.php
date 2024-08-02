@@ -15,6 +15,29 @@ class ProductAbisPakaiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('role:dokter')->only('product.index,
+        product.getupdatestockoutform'); // akses barang untuk dokter
+        
+        $this->middleware('role:staf')->only('product.index,
+        product.getupdatestockform,
+        product.getupdatestockoutform,
+        product.getDeleteProductList');//akses barang untuk staf
+
+        $this->middleware('role:staf')->only('peminjaman.barangKembali,
+        peminjaman.barangKembaliDetail,
+        peminjaman.getBorrowform,
+        peminjaman.getDeleteBarangList,
+        peminjaman.index,
+        identitas_peminjam.index,
+        identitas_peminjam.getDeleteIdentitasList');//akses peminjaman untuk staf
+
+        $this->middleware('role:staf')->only('riwayat.logProduct,
+        riwayat.dailyreportbap');//akses riwayat untuk staf
+
+    }
+
     public function index(Request $tipe)
     {
         //
@@ -23,9 +46,16 @@ class ProductAbisPakaiController extends Controller
         return view('product.index', ['pap' => $pap]);
     }
 
+    public function search(SearchRequest $request){
+        
+    }
+
     function indexdeleted($tipe)
     {
         // dd($tipe);
+        if (Gate::denies('delete-item')) {
+            abort(403);
+        }
         $pap = ProductAbisPakai::onlyTrashed()->where('tipe', $tipe)->get();
         return response()->json(
             array(
@@ -55,6 +85,9 @@ class ProductAbisPakaiController extends Controller
     {
         //
         // dd($request);
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         do {
             $idProd = Carbon::now(
                 'Asia/Jakarta'
@@ -138,6 +171,9 @@ class ProductAbisPakaiController extends Controller
      */
     public function destroy($ProductAbisPakai)
     {
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         //
         try {
             $pap = ProductAbisPakai::find($ProductAbisPakai);
@@ -158,6 +194,9 @@ class ProductAbisPakaiController extends Controller
 
     public function restore($id)
     {
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         $pap = ProductAbisPakai::withTrashed()->find($id);
         $kategori = $pap->tipe;
         if ($pap) {
@@ -175,6 +214,9 @@ class ProductAbisPakaiController extends Controller
 
     public function getUpdateStokForm(Request $request)
     {
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         $id = $request->get('id');
         $pap = ProductAbisPakai::find($id);
         session()->flash('product_id', $pap->id);
@@ -189,6 +231,9 @@ class ProductAbisPakaiController extends Controller
 
     function updateStock(Request $request)
     {
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         $b = new Batch();
         $session_id = session()->get('product_id');
         $id = $request->get('idProd');
@@ -207,7 +252,7 @@ class ProductAbisPakaiController extends Controller
             if ($product->isDirty()) {
                 $product->save();
             }
-            $b->id = $id . (int)Carbon::now('Asia/Jakarta')->format('YmdHis');
+            $b->id = $id . (int)Carbon::now('Asia/Jakarta')->format('Ymd');
             $b->tanggal_masuk = Carbon::now('Asia/Jakarta')->format('Y-m-d');
             $b->tanggal_kadaluwarsa = $dateEx;
             $b->jumlah = $jumlah;
@@ -230,6 +275,9 @@ class ProductAbisPakaiController extends Controller
 
     public function getUpdateStokOutForm(Request $request)
     {
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         $id = $request->get('id');
         $pap = ProductAbisPakai::with(['logBatch' => function ($query) {
             $query->join('batch_product as bp', 'bp.id', '=', 'log_product_batch.batch_product')
@@ -247,6 +295,10 @@ class ProductAbisPakaiController extends Controller
 
     function updateStockOut(Request $request)
     {
+        
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         $session_id = session()->get('product_id');
         $id = $request->get('idProd');
 
@@ -282,6 +334,9 @@ class ProductAbisPakaiController extends Controller
 
     function logProduct(Request $request)
     {
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         $id = $request->get('id');
         $logProduct = DB::table('product_abis_pakai as pap')
             ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
@@ -323,6 +378,9 @@ class ProductAbisPakaiController extends Controller
     public function laporanharianbap(Request $request)
     {
         //
+        if (Gate::denies('staf')) {
+            abort(403);
+        }
         $date = Carbon::now('Asia/Jakarta')->format('Y-m-d');
         $reqDate = $request->get('dateReport');
         if (isset($reqDate)) {

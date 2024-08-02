@@ -16,6 +16,7 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
         <div style="margin-bottom: 10px">
+            @can('staf')
             <a href="#modalCreate" data-toggle="modal" class="btn btn-info">Tambah produk baru</a>
             <a href="#modalEditProduct" data-toggle="modal" class="btn btn-info"
                 onclick="getDeleteProductList('@php echo $_GET['kategori'] @endphp')">Lihat Data
@@ -23,7 +24,7 @@
             {{-- <a href="#modalEditProduct" data-toggle="modal" class="btn btn-info"
                 onclick="getDeleteProductList(@php echo $_GET['kategori'] @endphp)">Lihat Data
                 Yang Dihapus</a> --}}
-
+            @endcan
         </div>
 
         @if (session('status'))
@@ -61,15 +62,22 @@
                                     onclick="getUpdateStokForm({{ $p->id }})">Tambah Stok</a>
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getUpdateStokOutForm({{ $p->id }})">Kurang Stok</a>
+                                @can('staf')
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getLogProduct({{ $p->id }})">Log Stok</a>
+<<<<<<< Updated upstream
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getStokBatchProduct({{ $p->id }})">Stok Batch</a>
+=======
+                                @endcan
+>>>>>>> Stashed changes
                                 <form method="POST" action="{{ route('product.destroy', $p->id) }}">
                                     @csrf
+                                    @can('staf')
                                     {{-- @method('DELETE') --}}
                                     <input type="submit" value="Hapus" class="btn btn-danger"
                                         onclick="return confirm('Apakah yakin ingin menghapus produk dengan ID {{ $p->id }} - {{ $p->nama_barang }}?')">
+                                    @endcan
                                 </form>
                             </td>
                         </tr>
@@ -79,6 +87,7 @@
             </tbody>
         </table>
 
+        
         <div class="modal fade" id="modalEditProduct" tabindex="-1" role="basic" aria-hidden="true">
             <div class="modal-dialog modal-wide">
                 <div class="modal-content">
@@ -88,14 +97,19 @@
                 </div>
             </div>
         </div>
+        
     </div>
+
 
     <div class="modal fade" id="modalCreate" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
+        @can('staf')
             <div class="modal-content">
                 <div class="modal-header">
+                    
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">Tambah produk baru</h4>
+                    
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="{{ route('product.store') }}" enctype="multipart/form-data">
@@ -133,12 +147,28 @@
                     </form>
                 </div>
             </div>
+        @endcan
         </div>
     </div>
 @endsection
 
 @section('javascript')
     <script>
+        //untuk pencarian
+        document.getElementById('dt-search-0').addEventListener('click', function() {
+            var input = document.getElementById('search-input').value;
+            var regex = /^[a-zA-Z0-9\s\-\.]+$/;
+            
+            if (!regex.test(input)) {
+                document.getElementById('error-message').textContent = 'Input hanya boleh mengandung huruf, angka, spasi, tanda sambung, dan titik.';
+            } else {
+                document.getElementById('error-message').textContent = '';
+                // Lakukan aksi pencarian
+                console.log('Search input is valid:', input);
+            }
+        });
+
+
         $(document).ready(function() {
             $('#listProduct').DataTable({
                 responsive: true,

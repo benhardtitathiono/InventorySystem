@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BarangPinjam;
 use App\Models\Peminjaman;
 use App\Models\ProductAbisPakai;
 use Carbon\Carbon;
@@ -117,16 +118,26 @@ class PeminjamanController extends Controller
         $idPinjam = $request->query->keys();
 
         $peminjaman = Peminjaman::find($idPinjam);
-        if (!$peminjaman) {
+
+        $tipeProd = '';
+        if ($peminjaman) {
             for ($i = 1; $i < $request->totProd; $i++) {
-                $prodID = $request->prodID . $i;
-                $statKembali = $request->statKembali . $i;
-                $peminjaman->detailBarang()->updateExistingPivot($prodID, [
-                    'status_barang_kembali' => $statKembali,
-                    'updated_at' => Carbon::now('Asia/Jakarta')->format('Y-m-d')
-                ]);
+                $prodID = $request->input('prodID' . $i);
+
+                $tipeProd = BarangPinjam::find($prodID);
+                $tipe = $tipeProd->tipe;
+                $statKembali = $request->input('statKembali' . $i);
+
+                // Update the pivot table data using DB query
+                DB::table('detail_peminjam')  // replace with your actual pivot table name
+                    ->where('peminjaman_id', $idPinjam)
+                    ->where('product_pinjam_id', $prodID)
+                    ->update([
+                        'status_barang_kembali' => $statKembali,
+                        'updated_at' => now()  // Update the timestamp
+                    ]);
             }
-            return redirect()->back()->with('message', 'Sukses menyelesaikan pinjaman! Silahkan cek peminjaman ' . $idPinjam . ' untuk validasi');
+            return redirect()->to('barangkembali?kategori=' . $tipe)->with('message', 'Sukses menyelesaikan pinjaman! Silahkan cek peminjaman untuk validasi');
         }
     }
 }

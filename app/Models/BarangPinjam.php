@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Controllers\BarangPinjamController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BarangPinjam extends Model
@@ -16,7 +17,7 @@ class BarangPinjam extends Model
 
     protected $fillable = ['nama_barang', 'jumlah', 'deskripsi'];
 
-    public function detailPinjam()
+    public function detailPinjam(): BelongsToMany
     {
         return $this->belongsToMany(
             Peminjaman::class,

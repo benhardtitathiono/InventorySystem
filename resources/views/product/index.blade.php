@@ -63,6 +63,8 @@
                                     onclick="getUpdateStokOutForm({{ $p->id }})">Kurang Stok</a>
                                 <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                     onclick="getLogProduct({{ $p->id }})">Log Stok</a>
+                                <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
+                                    onclick="getStokBatchProduct({{ $p->id }})">Stok Batch</a>
                                 <form method="POST" action="{{ route('product.destroy', $p->id) }}">
                                     @csrf
                                     {{-- @method('DELETE') --}}
@@ -223,6 +225,20 @@
             $.ajax({
                 type: 'POST',
                 url: '{{ route('log.getLogProduct') }}',
+                data: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                    'id': id
+                },
+                success: function(data) {
+                    $('#modalContent').html(data.msg)
+                }
+            });
+        }
+
+        function getStokBatchProduct(id) {
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('log.getStokBatchProduct') }}',
                 data: {
                     '_token': '<?php echo csrf_token(); ?>',
                     'id': id

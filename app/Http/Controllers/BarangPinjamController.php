@@ -167,6 +167,11 @@ class BarangPinjamController extends Controller
 
     public function getBorrowForm(Request $tipe)
     {
+        // dd($tipe->query('kategori'));
+        $idPeminjam = IdentitasPeminjam::all();
+        $barangPinjam = BarangPinjam::where('tipe', $tipe->query('kategori'))->orderBy('nama_barang')->get();
+        $totProd = count($barangPinjam);
+        return view('peminjaman.getBorrowform', ['barangPinjam' => $barangPinjam, 'idPeminjam' => $idPeminjam, 'totProd' => $totProd]);
     }
 
     function borrowProduct(Request $request)

@@ -30,7 +30,7 @@ From Medium Devices Up To Larger Devices
 
     .page-sidebar.navbar-collapse {
         max-height: none !important;
-        width: 15%;
+        width: 17%;
     }
 
     /***
@@ -132,7 +132,7 @@ From Medium Devices Up To Larger Devices
   	Page content
   	***/
     .page-content {
-        margin-left: 15%;
+        margin-left: 17%;
         margin-top: 0px;
         min-height: 760px;
         padding: 25px 20px 20px 20px;

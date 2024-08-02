@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Batch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BatchController extends Controller
 {
@@ -12,9 +13,20 @@ class BatchController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $tipe)
     {
         //
+        $bp = DB::table('batch_product as bp')
+            ->join('log_product_batch as lpb', 'bp.id', '=', 'lpb.batch_product')
+            ->join('product_abis_pakai as pap', 'lpb.product_id', '=', 'pap.id')
+            ->where('pap.tipe', $tipe->get('kategori'))
+            ->whereNull('pap.deleted_at')
+            ->orderBy('bp.id')
+            ->orderBy('bp.tanggal_kadaluwarsa')
+            ->select('bp.id', 'pap.nama_barang', 'bp.tanggal_masuk', 'bp.tanggal_kadaluwarsa', 'bp.jumlah')
+            ->get();
+        // dd($bp);
+        return view('batch.index', ['bp' => $bp]);
     }
 
     /**

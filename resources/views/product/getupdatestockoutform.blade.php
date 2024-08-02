@@ -1,6 +1,5 @@
 <form method="POST" action="{{ route('product.updateStockOut', $pap->id) }}">
     @csrf
-    {{-- @method('PUT') --}}
     <div class="form-group">
         <label for="idProd">ID produk</label>
         <input type="text" class="form-control" name="idProd" id="idProd" aria-describedby="idHelp"
@@ -17,7 +16,7 @@
         @endphp
         <select name="batchProd" id="batchProd" class="form-control" onchange="updateMaxValue(this)">
             @php
-                $groupedBatches = $pap->logBatch->sortBy('batch_product, tanggal')->groupBy('id');
+                $groupedBatches = $pap->logBatch->sortBy('tanggal_kadaluwarsa')->groupBy('id');
             @endphp
             @foreach ($groupedBatches as $batchId => $batches)
                 @php
@@ -31,14 +30,14 @@
                         }
                 @endphp
                         <option value="{{ $batchId }}" data-quantity="{{ $remainingStock }}">
-                            {{ $batchId }} -
-                            sisa stok {{ $remainingStock }}</option>
+                            {{ $batchId }} - sisa stok: {{ $remainingStock }} ||
+                                <strong>tanggal kadaluwarsa: {{ $batches->first()->tanggal_kadaluwarsa }}</strong>
+                        </option>
                 @php
                     }
                 @endphp
             @endforeach
         </select>
-
         <label class="stok" for="stok">Stok</label><br>
         Stok Sekarang: {{ $pap->jumlah }}
         <input class="form-control" type="number" name="stokProdQuan" id="stokProdQuan" min="1" max="{{ $maxValue }}" value="1">

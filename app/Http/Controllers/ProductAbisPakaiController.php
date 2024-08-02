@@ -231,7 +231,10 @@ class ProductAbisPakaiController extends Controller
     public function getUpdateStokOutForm(Request $request)
     {
         $id = $request->get('id');
-        $pap = ProductAbisPakai::find($id);
+        $pap = ProductAbisPakai::with(['logBatch' => function ($query) {
+            $query->join('batch_product as bp', 'bp.id', '=', 'log_product_batch.batch_product')
+                ->orderBy('bp.tanggal_kadaluwarsa');
+        }])->find($id);
         session()->flash('product_id', $pap->id);
         // dd($pap->logBatch);
         return response()->json(
@@ -284,6 +287,7 @@ class ProductAbisPakaiController extends Controller
             ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
             ->join('batch_product as bp', 'lpb.batch_product', '=', 'bp.id')
             ->where('pap.id', $id)
+            ->groupBy('pap.id', 'pap.nama_barang', 'bp.id', 'lpb.quantity_in', 'lpb.quantity_out', 'lpb.tanggal')
             ->orderBy('lpb.tanggal', 'desc')
             ->select('pap.id', 'pap.nama_barang', 'bp.id as batch_product', 'lpb.quantity_in', 'lpb.quantity_out', 'lpb.tanggal')
             ->get();
@@ -292,6 +296,26 @@ class ProductAbisPakaiController extends Controller
             array(
                 'status' => 'oke',
                 'msg' => view('riwayat.logProduct', compact('logProduct'))->render()
+            )
+        );
+    }
+
+    function stokBatchProduct(Request $request)
+    {
+        $id = $request->get('id');
+        $stokBatchProduct = DB::table('product_abis_pakai as pap')
+            ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
+            ->join('batch_product as bp', 'lpb.batch_product', '=', 'bp.id')
+            ->where('pap.id', $id)
+            ->groupBy('bp.id', 'bp.tanggal_kadaluwarsa')
+            ->orderBy('bp.tanggal_kadaluwarsa')
+            ->select('bp.id as batch_product', DB::raw('sum(lpb.quantity_in) as tot_in'), DB::raw('sum(lpb.quantity_out) as tot_out'), 'bp.tanggal_kadaluwarsa')
+            ->get();
+        // dd($stokBatchProduct);
+        return response()->json(
+            array(
+                'status' => 'oke',
+                'msg' => view('riwayat.stokBatchProd', compact('stokBatchProduct'))->render()
             )
         );
     }

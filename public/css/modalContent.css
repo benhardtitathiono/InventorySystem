@@ -42,3 +42,9 @@ td {
     font-size: 20px;
     font-weight: bold;
 }
+
+.tanggal_exp{
+    font-weight: bold;
+    color: red;
+    font-size: large;
+}

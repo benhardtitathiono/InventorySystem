@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Controllers\PeminjamanController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Peminjaman extends Model
 {
@@ -12,7 +13,7 @@ class Peminjaman extends Model
 
     protected $table = 'peminjaman';
 
-    public function detailBarang()
+    public function detailBarang(): BelongsToMany
     {
         return $this->belongsToMany(
             BarangPinjam::class,

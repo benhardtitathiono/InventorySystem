@@ -254,6 +254,31 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </ul>
                                     </li>
                                     <li>
+                                        <a href="javascript:;">
+                                            <i class="icon-list"></i>
+                                            Batch Product Abis Pakai
+                                            <span class="arrow"></span>
+                                        </a>
+                                        <ul class="sub-menu">
+                                            <li>
+                                                <form action="{{ url('batchprod') }}" method="get">
+                                                    <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                        Umum
+                                                        <input type="hidden" name="kategori" value="Umum">
+                                                    </a>
+                                                </form>
+                                            </li>
+                                            <li>
+                                                <form action="{{ url('batchprod') }}" method="get">
+                                                    <a href="javascript:;" onclick="this.parentNode.submit();">
+                                                        Poli Gigi
+                                                        <input type="hidden" name="kategori" value="Poli Gigi">
+                                                    </a>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
                                         <a href="{{ url('identitaspeminjam') }}">
                                             <i class="icon-list"></i>
                                             Identitas Peminjam</a>

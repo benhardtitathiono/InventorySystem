@@ -53,7 +53,7 @@ class ProductAbisPakaiController extends Controller
     function indexdeleted($tipe)
     {
         // dd($tipe);
-        if (Gate::denies('delete-item')) {
+        if (Gate::denies('staf')) {
             abort(403);
         }
         $pap = ProductAbisPakai::onlyTrashed()->where('tipe', $tipe)->get();

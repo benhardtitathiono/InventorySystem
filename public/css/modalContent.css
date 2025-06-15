@@ -1,0 +1,50 @@
+.modal-content {
+    margin: 0 5% 5% 5%;
+}
+#stokProdQuan {
+    margin-bottom: 2px;
+}
+
+a {
+    font-size: 14px !important;
+    padding: 6px 12px !important;
+}
+
+.btn-danger,
+a {
+    width: 100% !important;
+    margin-bottom: 2px !important;
+}
+
+.stok {
+    margin: 0;
+}
+
+tfoot {
+    font-size: 20px;
+}
+
+#dateReportForm {
+    margin-right: 80%;
+}
+
+th,
+td {
+    text-align: center !important;
+}
+
+td {
+    padding: 5px !important;
+}
+
+.dt-empty {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.tanggal_exp{
+    font-weight: bold;
+    color: red;
+    font-size: large;
+}

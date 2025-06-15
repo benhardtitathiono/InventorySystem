@@ -135,7 +135,7 @@
 
                             <select name="tipeProd" id="tipeProd" class="form-control" aria-describedby="tipeHelp">
                                 <option value="Poli Gigi">Poli Gigi</option>
-                                <option value="Umum">Umum</option>
+                                <option value="Poli Umum">Poli Umum</option>
                             </select>
                         </div>
                 </div>

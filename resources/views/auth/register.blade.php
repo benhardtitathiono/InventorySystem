@@ -61,6 +61,30 @@
                             </div>
                         </div>
 
+                        <div class="row mb-3">
+                            <label for="role" class="col-md-4 col-form-label text-md-end">Role</label>
+                            <div class="col-md-6">
+                                <select name="role" id="role" class="form-control" required>
+                                    <option value="">-- Pilih Role --</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="staf">Staf</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- {{-- Department Dropdown --}} -->
+                        <div class="row mb-3">
+                            <label for="departments_id" class="col-md-4 col-form-label text-md-end">Department</label>
+                            <div class="col-md-6">
+                                <select name="departments_id" id="departments_id" class="form-control" required>
+                                    <option value="">-- Pilih Departemen --</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">

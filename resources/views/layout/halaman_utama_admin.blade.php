@@ -202,7 +202,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <form action="{{ url('productabispakai') }}" method="get">
                                         <a href="javascript:;" onclick="this.parentNode.submit();">
                                             Poli Gigi
-                                            <input type="hidden" name="kategori" value="Poli Gigi">
+                                            <input type="hidden" name="kategori" value="Gigi">
                                         </a>
                                     </form>
                                 </li>
@@ -233,7 +233,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <form action="{{ url('productpinjam') }}" method="get">
                                         <a href="javascript:;" onclick="this.parentNode.submit();">
                                             Poli Gigi
-                                            <input type="hidden" name="kategori" value="Poli Gigi">
+                                            <input type="hidden" name="kategori" value="Gigi">
                                         </a>
                                     </form>
                                 </li>
@@ -258,7 +258,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <form action="{{ url('barangkembali') }}" method="get">
                                         <a href="javascript:;" onclick="this.parentNode.submit();">
                                             Poli Gigi
-                                            <input type="hidden" name="kategori" value="Poli Gigi">
+                                            <input type="hidden" name="kategori" value="Gigi">
                                         </a>
                                     </form>
                                 </li>
@@ -284,7 +284,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <form action="{{ url('batchprod') }}" method="get">
                                         <a href="javascript:;" onclick="this.parentNode.submit();">
                                             Poli Gigi
-                                            <input type="hidden" name="kategori" value="Poli Gigi">
+                                            <input type="hidden" name="kategori" value="Gigi">
                                         </a>
                                     </form>
                                 </li>

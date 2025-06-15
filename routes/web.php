@@ -5,6 +5,9 @@ use App\Http\Controllers\BatchController;
 use App\Http\Controllers\IdentitasPeminjamController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProductAbisPakaiController;
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Department;
 use App\Models\Peminjaman;
 use App\Models\ProductAbisPakai;
 use Illuminate\Support\Facades\Route;
@@ -73,3 +76,6 @@ route::post('/barangkembali/updatestatus', [PeminjamanController::class, 'update
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/register', [RegisterController::class, 'showDepartments'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);

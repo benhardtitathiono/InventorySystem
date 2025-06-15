@@ -31,8 +31,11 @@ body {
   justify-content: center; 
   align-items: center;      
   text-align: center;
-  min-height: 70vh;         
+  min-height: 70vh;
+  font-weight: bold;
+  color: #4f8340;       
 }
+
 
 /*
 Internet Explorer 10 doesn't differentiate device width from viewport width, and thus doesn't 

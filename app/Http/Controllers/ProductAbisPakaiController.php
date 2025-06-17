@@ -24,7 +24,7 @@ class ProductAbisPakaiController extends Controller
         $this->middleware('role:staf')->only('product.index,
         product.getupdatestockform,
         product.getupdatestockoutform,
-        product.getDeleteProductList');//akses barang untuk staf
+        product.getDeleteProductList'); //akses barang untuk staf
 
         $this->middleware('role:staf')->only('peminjaman.barangKembali,
         peminjaman.barangKembaliDetail,
@@ -32,10 +32,10 @@ class ProductAbisPakaiController extends Controller
         peminjaman.getDeleteBarangList,
         peminjaman.index,
         identitas_peminjam.index,
-        identitas_peminjam.getDeleteIdentitasList');//akses peminjaman untuk staf
+        identitas_peminjam.getDeleteIdentitasList'); //akses peminjaman untuk staf
 
         $this->middleware('role:staf')->only('riwayat.logProduct,
-        riwayat.dailyreportbap');//akses riwayat untuk staf
+        riwayat.dailyreportbap'); //akses riwayat untuk staf
 
     }
 
@@ -172,9 +172,9 @@ class ProductAbisPakaiController extends Controller
             abort(403);
         }
         //
+        $pap = ProductAbisPakai::find($ProductAbisPakai);
+        $kategori = $pap->tipe;
         try {
-            $pap = ProductAbisPakai::find($ProductAbisPakai);
-            $kategori = $pap->tipe;
             $pap->delete();
             $pap->deleted_at = Carbon::now(
                 'Asia/Jakarta'

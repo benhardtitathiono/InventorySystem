@@ -42,7 +42,7 @@
                     @foreach ($bp as $bp)
                         @php
                             $sisaHari = \Carbon\Carbon::now('Asia/Jakarta')->diffInDays(
-                                \Carbon\Carbon::parse($bp->tanggal_kadaluwarsa),
+                                \Carbon\Carbon::parse($bp->tanggal_kadaluarsa),
                                 false,
                             );
                         @endphp
@@ -54,7 +54,7 @@
                                     <td>{{ $bp->nama_barang }}</td>
                                     <td>{{ $bp->jumlah }}</td>
                                     <td>{{ $bp->tanggal_masuk }}</td>
-                                    <td>{{ $bp->tanggal_kadaluwarsa }} Kurang dari {{ $sisaHari }}
+                                    <td>{{ $bp->tanggal_kadaluarsa }} Kurang dari {{ $sisaHari }}
                                         hari lagi expire
                                     </td>
                                     <td style="text-align: center">
@@ -77,7 +77,7 @@
                                     <td>{{ $bp->nama_barang }}</td>
                                     <td>{{ $bp->jumlah }}</td>
                                     <td>{{ $bp->tanggal_masuk }}</td>
-                                    <td>{{ $bp->tanggal_kadaluwarsa }} sudah expire sejak {{ $sisaHari }} hari lalu
+                                    <td>{{ $bp->tanggal_kadaluarsa }} sudah expire sejak {{ $sisaHari }} hari lalu
                                     </td>
                                     <td style="text-align: center">
                                         {{-- <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
@@ -99,7 +99,7 @@
                                     <td>{{ $bp->nama_barang }}</td>
                                     <td>{{ $bp->jumlah }}</td>
                                     <td>{{ $bp->tanggal_masuk }}</td>
-                                    <td>{{ $bp->tanggal_kadaluwarsa }}</td>
+                                    <td>{{ $bp->tanggal_kadaluarsa }}</td>
                                     <td style="text-align: center">
                                         {{-- <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
                                             onclick="getLogProduct({{ $p->id }})">Log Stok</a> --}}

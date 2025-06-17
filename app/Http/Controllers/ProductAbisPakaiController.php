@@ -277,8 +277,8 @@ class ProductAbisPakaiController extends Controller
         }
         $id = $request->get('id');
         $pap = ProductAbisPakai::with(['logBatch' => function ($query) {
-            $query->join('batch_product as bp', 'bp.id', '=', 'log_product_batch.batch_product')
-                ->orderBy('bp.tanggal_kadaluwarsa');
+            $query->join('batch_product as bp', 'bp.id', '=', 'detail_batch_product.batch_product_id')
+                ->orderBy('bp.tanggal_kadaluarsa');
         }])->find($id);
         session()->flash('product_id', $pap->id);
         // dd($pap->logBatch);
@@ -336,12 +336,12 @@ class ProductAbisPakaiController extends Controller
         }
         $id = $request->get('id');
         $logProduct = DB::table('product_abis_pakai as pap')
-            ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
-            ->join('batch_product as bp', 'lpb.batch_product', '=', 'bp.id')
+            ->join('detail_batch_product as dbp', 'pap.id', '=', 'db.product_abis_pakai_id')
+            ->join('batch_product as bp', 'dbp.batch_product_id', '=', 'bp.id')
             ->where('pap.id', $id)
-            ->groupBy('pap.id', 'pap.nama_barang', 'bp.id', 'lpb.quantity_in', 'lpb.quantity_out', 'lpb.tanggal')
-            ->orderBy('lpb.tanggal', 'desc')
-            ->select('pap.id', 'pap.nama_barang', 'bp.id as batch_product', 'lpb.quantity_in', 'lpb.quantity_out', 'lpb.tanggal')
+            ->groupBy('pap.id', 'pap.nama_barang', 'bp.id', 'dbp.quantity_in', 'dbp.quantity_out', 'dbp.tanggal')
+            ->orderBy('dbp.tanggal', 'desc')
+            ->select('pap.id', 'pap.nama_barang', 'bp.id as batch_product', 'dbp.quantity_in', 'dbp.quantity_out', 'dbp.tanggal')
             ->get();
         // dd($logProduct);
         return response()->json(
@@ -356,12 +356,12 @@ class ProductAbisPakaiController extends Controller
     {
         $id = $request->get('id');
         $stokBatchProduct = DB::table('product_abis_pakai as pap')
-            ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
-            ->join('batch_product as bp', 'lpb.batch_product', '=', 'bp.id')
+            ->join('detail_batch_product as dbp', 'pap.id', '=', 'bp.product_abis_pakai_id')
+            ->join('batch_product as bp', 'dbp.batch_product_id', '=', 'bp.id')
             ->where('pap.id', $id)
-            ->groupBy('bp.id', 'bp.tanggal_kadaluwarsa')
-            ->orderBy('bp.tanggal_kadaluwarsa')
-            ->select('bp.id as batch_product', DB::raw('sum(lpb.quantity_in) as tot_in'), DB::raw('sum(lpb.quantity_out) as tot_out'), 'bp.tanggal_kadaluwarsa')
+            ->groupBy('bp.id', 'bp.tanggal_kadaluarsa')
+            ->orderBy('bp.tanggal_kadaluarsa')
+            ->select('bp.id as batch_product', DB::raw('sum(dbp.quantity_in) as tot_in'), DB::raw('sum(dbp.quantity_out) as tot_out'), 'bp.tanggal_kadaluarsa')
             ->get();
         // dd($stokBatchProduct);
         return response()->json(
@@ -384,10 +384,11 @@ class ProductAbisPakaiController extends Controller
             $date = $reqDate;
         }
         $logpap = DB::table('product_abis_pakai as pap')
-            ->join('log_product_batch as lpb', 'pap.id', '=', 'lpb.product_id')
-            ->where('lpb.tanggal', $date)
-            ->groupBy('pap.id', 'pap.nama_barang', 'lpb.tanggal')
-            ->select('pap.id', 'pap.nama_barang', DB::raw('sum(lpb.quantity_in) as totquanin'), DB::raw('sum(lpb.quantity_out) as totquanout'), 'lpb.tanggal')
+            ->join('batch_product as bp', 'pap.id', '=', 'bp.product_abis_pakai_id')
+            ->join('detail_batch_product as dbp', 'bp.id', '=', 'dbp.batch_product_id')
+            ->where('dbp.tanggal', $date)
+            ->groupBy('pap.id', 'pap.nama_barang', 'dbp.tanggal')
+            ->select('pap.id', 'pap.nama_barang', DB::raw('sum(bp.simpan_quantity_in) as totquanin'), DB::raw('sum(dbp.quantity_out) as totquanout'), 'dbp.tanggal')
             ->get();
         // dd($logpap);
         return view('riwayat.dailyreportbap', ['logpap' => $logpap, 'date' => $date]);

@@ -17,13 +17,13 @@ class BatchController extends Controller
     {
         //
         $bp = DB::table('batch_product as bp')
-            ->join('log_product_batch as lpb', 'bp.id', '=', 'lpb.batch_product')
-            ->join('product_abis_pakai as pap', 'lpb.product_id', '=', 'pap.id')
+            ->join('detail_batch_product as dbp', 'bp.id', '=', 'dbp.batch_product_id')
+            ->join('product_abis_pakai as pap', 'bp.product_abis_pakai_id', '=', 'pap.id')
             ->where('pap.tipe', $tipe->get('kategori'))
             ->whereNull('pap.deleted_at')
             ->orderBy('bp.id')
-            ->orderBy('bp.tanggal_kadaluwarsa')
-            ->select('bp.id', 'pap.nama_barang', 'bp.tanggal_masuk', 'bp.tanggal_kadaluwarsa', 'bp.jumlah')
+            ->orderBy('bp.tanggal_kadaluarsa')
+            ->select('bp.id', 'pap.nama_barang', 'bp.tanggal_masuk', 'bp.tanggal_kadaluarsa', 'bp.jumlah')
             ->get();
         // dd($bp);
         return view('batch.index', ['bp' => $bp]);

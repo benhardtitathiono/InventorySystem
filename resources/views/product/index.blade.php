@@ -16,6 +16,7 @@
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
         <div style="margin-bottom: 10px">
+
             @can('staf')
             <a href="#modalCreate" data-toggle="modal" class="btn btn-info">Tambah produk baru</a>
             <a href="#modalEditProduct" data-toggle="modal" class="btn btn-info"
@@ -31,6 +32,11 @@
             <div class="alert alert-success">{{ session('status') }}</div>
         @endif
 
+            <div >
+                <input type="text" id="search-input" placeholder="Cari...">
+                <button id="dt-search-0">Cari</button>
+                <p id="error-message" style="color: red;"></p>
+            </div>
         <table id="listProduct" class="table">
             <thead>
                 <tr>
@@ -135,7 +141,7 @@
 
                             <select name="tipeProd" id="tipeProd" class="form-control" aria-describedby="tipeHelp">
                                 <option value="Poli Gigi">Poli Gigi</option>
-                                <option value="Poli Umum">Poli Umum</option>
+                                <option value="Umum">Umum</option>
                             </select>
                         </div>
                 </div>

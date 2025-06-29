@@ -176,8 +176,148 @@ License: You must have a valid license purchased only from themeforest(the above
                             <span class="title">Master</span>
                             <span class="arrow "></span>
                         </a> -->
-                        @can('staf')
+                        
                         <li>
+                            @if (Auth::user()->role == 'admin')
+                            <a href="{{ url('/dashboard') }}">
+                                <i class="icon-home"></i>
+                                <span class="title">Dashboard</span>
+                                <span class="selected"></span>
+                            </a>
+
+                            <a href="{{ url('/daftarpegawai') }}">
+                                <i class="icon-list"></i>
+                                <span class="title">Daftar Pegawai</span>
+                                <span class="selected"></span>
+                            </a>
+                            
+                            <!-- BARANG HABIS PAKAI -->
+                            <a href="javascript:;">
+                                <i class="icon-list"></i>
+                                Barang Abis Pakai
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <form action="{{ url('productabispakai') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Umum
+                                            <input type="hidden" name="kategori" value="Umum">
+                                        </a>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{{ url('productabispakai') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Gigi
+                                            <input type="hidden" name="kategori" value="Gigi">
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+                            <!-- BARANG HABIS PAKAI -->
+                            <!-- PEMINJAMAN BARANG -->
+                            <a href="javascript:;">
+                                <i class="icon-list"></i>
+                                Peminjaman Barang
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <form action="{{url('')}}" method="get">
+                                        <a href="{{ url('identitaspeminjam') }}">
+                                        <!-- <i class="icon-list"></i> -->
+                                        Identitas Peminjam
+                                        </a>
+                                    </form>
+                                    <form action="{{ url('productpinjam') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Umum
+                                            <input type="hidden" name="kategori" value="Umum">
+                                        </a>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{{ url('productpinjam') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Gigi
+                                            <input type="hidden" name="kategori" value="Gigi">
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+                            <!-- PEMINJAMAN BARANG -->
+                            <!-- PENGEMBALIAN BARANG -->
+                            <a href="javascript:;">
+                                <i class="icon-list"></i>
+                                Pengembalian Barang
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <form action="{{ url('barangkembali') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Umum
+                                            <input type="hidden" name="kategori" value="Umum">
+                                        </a>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{{ url('barangkembali') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Gigi
+                                            <input type="hidden" name="kategori" value="Gigi">
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+                            <!-- PENGEMBALIAN BARANG -->
+                            <a href="javascript:;">
+                                <i class="icon-list"></i>
+                                Penyediaan Bahan
+                                <span class="arrow"></span>
+                            </a>
+
+                            <!-- PENGEMBALIAN BARANG -->
+                            <ul class="sub-menu">
+                                <li>
+                                    <form action="{{ url('batchprod') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Umum
+                                            <input type="hidden" name="kategori" value="Umum">
+                                        </a>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{{ url('batchprod') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Gigi
+                                            <input type="hidden" name="kategori" value="Gigi">
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+                            <!-- PENGEMBALIAN BARANG -->
+                            <!-- LAPORAN -->
+                            <a href="javascript:;">
+                                <i class="icon-list"></i>
+                                <span class="title">Laporan</span>
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a href="{{ url('laporanharianbarangabispakai') }}">
+                                    <i class="icon-book-open"></i>
+                                    Laporan Riwayat Bahan Habis Pakai</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('back/albumProduct') }}">
+                                        <i class="icon-book-open"></i>
+                                        Laporan Riwayat Peminjaman</a>
+                                </li>
+                            </ul>
+                            <!-- LAPORAN -->
+                            @elseif (Auth::user()->role == 'staf')
                             <a href="{{ url('/dashboard') }}">
                                 <i class="icon-home"></i>
                                 <span class="title">Dashboard</span>
@@ -308,9 +448,40 @@ License: You must have a valid license purchased only from themeforest(the above
                                         Laporan Riwayat Peminjaman</a>
                                 </li>
                             </ul>
-                            <!-- LAPORAN -->
+                            @elseif (Auth::user()->role == 'dokter')
+                             <a href="{{ url('/dashboard') }}">
+                                <i class="icon-home"></i>
+                                <span class="title">Dashboard</span>
+                                <span class="selected"></span>
+                            </a>
+                            <!-- BARANG HABIS PAKAI -->
+                            <a href="javascript:;">
+                                <i class="icon-list"></i>
+                                Barang Abis Pakai
+                                <span class="arrow"></span>
+                            </a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <form action="{{ url('productabispakai') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Umum
+                                            <input type="hidden" name="kategori" value="Umum">
+                                        </a>
+                                    </form>
+                                </li>
+                                <li>
+                                    <form action="{{ url('productabispakai') }}" method="get">
+                                        <a href="javascript:;" onclick="this.parentNode.submit();">
+                                            Poli Gigi
+                                            <input type="hidden" name="kategori" value="Gigi">
+                                        </a>
+                                    </form>
+                                </li>
+                            </ul>
+                            <!-- BARANG HABIS PAKAI -->
+                            @endif
                         </li>
-                        @endcan
+                        
                     </li>
 
                 </ul>

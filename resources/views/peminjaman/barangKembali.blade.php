@@ -36,7 +36,6 @@
                     <th>Identitas Peminjam</th>
                     <th>Tanggal Ditambahkan</th>
                     <th>Terakhir Diperbarui</th>
-
                     <th>Action</th>
                 </tr>
             </thead>

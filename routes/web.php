@@ -6,6 +6,7 @@ use App\Http\Controllers\IdentitasPeminjamController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProductAbisPakaiController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Department;
 use App\Models\Peminjaman;
@@ -79,3 +80,4 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/register', [RegisterController::class, 'showDepartments'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+route::get('/daftarpegawai',[EmployeeController::class, 'index'])->name('employee.index');

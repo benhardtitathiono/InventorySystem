@@ -13,6 +13,6 @@ class Batch extends Model
 
     public function logBatch()
     {
-        return $this->belongsToMany(ProductAbisPakai::class, 'detail_batch_product', 'batch_product', 'product_id')->withPivot('quantity_in', 'quantity_out', 'tanggal');
+        return $this->belongsToMany(ProductAbisPakai::class, 'detail_batch_product', 'batch_product_id','batch_product_product_abis_pakai_id')->withPivot( 'quantity_in','quantity_out', 'tanggal');
     }
 }

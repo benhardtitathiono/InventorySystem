@@ -18,8 +18,10 @@ class ProductAbisPakaiController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('role:dokter')->only('product.index,
-        product.getupdatestockoutform'); // akses barang untuk dokter
+        $this->middleware('role:dokter')->only(
+        'product.index,
+        product.getupdatestockoutform'
+        ); // akses barang untuk dokter
 
         $this->middleware('role:staf')->only('product.index,
         product.getupdatestockform,
@@ -37,6 +39,22 @@ class ProductAbisPakaiController extends Controller
         $this->middleware('role:staf')->only('riwayat.logProduct,
         riwayat.dailyreportbap');//akses riwayat untuk staf
 
+        $this->middleware('role:admin')->only('
+
+        product.index,
+        product.getupdatestockoutform,
+        product.getupdatestockform,
+        product.getDeleteProductList,
+        peminjaman.barangKembali,
+        peminjaman.barangKembaliDetail,
+        peminjaman.getBorrowform,
+        peminjaman.getDeleteBarangList,
+        peminjaman.index,
+        identitas_peminjam.index,
+        identitas_peminjam.getDeleteIdentitasList,
+        riwayat.logProduct,
+        riwayat.dailyreportbap
+        ');//akses batch untuk staf
     }
 
     public function index(Request $tipe)
@@ -113,12 +131,12 @@ class ProductAbisPakaiController extends Controller
         $b = new Batch();
         $b->id = $idBatch;
         $b->tanggal_masuk = Carbon::now('Asia/Jakarta')->format('Y-m-d');
-        $b->tanggal_kadaluwarsa = $request->get('dateExProd');
+        $b->tanggal_kadaluarsa = $request->get('dateExProd');
         $b->jumlah = $request->get('jumlahProd');
         $b->save();
 
         $b->logBatch()->attach($idProd, [
-            "quantity_in" => $request->get('jumlahProd'),
+            // "quantity_in" => $request->get('jumlahProd'),
             "tanggal" => Carbon::now('Asia/Jakarta')->format('Y-m-d')
         ]);
         $b->save();

@@ -15,7 +15,7 @@
         @if (session('message'))
             <div class="alert alert-success">{{ session('message') }}</div>
         @endif
-        <form id="formBorrow" method="POST" action="{{ route('productpinjam.borrowProduct') }}">
+        <form id="formBorrow" method="post" action="{{ route('productpinjam.borrowProduct') }}">
             @csrf
             <label for="identityPinjam">Identitas peminjam</label>
             <select class="form-control" name="identityPinjam" id="identityPinjam" aria-describedby="identityHelp"
@@ -31,11 +31,11 @@
                     <label for="idProd">ID produk</label>
                     <select class="form-control" name="idProd" id="idProd" aria-describedby="idHelp"
                         onchange="saveId(this)">
-                        @foreach ($barangPinjam as $barangPinjam)
-                            <option value="{{ $barangPinjam->id }}" data-idProd="{{ $barangPinjam->id }}"
-                                data-total="{{ $barangPinjam->jumlah }}"
-                                data-stokTersedia="{{ $barangPinjam->totalBarangDipinjam }}">
-                                {{ $barangPinjam->id . ' - ' . $barangPinjam->nama_barang }}
+                        @foreach ($barangPinjam as $barang)
+                            <option value="{{ $barang->id }}" data-idProd="{{ $barang->id }}"
+                                data-total="{{ $barang->jumlah }}"
+                                data-stokTersedia="{{ $barang->stok_tersedia }}">
+                                {{ $barang->id . ' - ' . $barang->nama_barang }}
                             </option>
                         @endforeach
                     </select>
@@ -48,12 +48,12 @@
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="totProdBorrow" id="totProdBorrow">
+            <!-- <input type="hidden" name="totProdBorrow" id="totProdBorrow"> -->
             <input type="hidden" name="idIdentity" id="idIdentity">
             <button type="submit" class="btn btn-primary">Submit</button>
-            <button type="button" id="addInput" class="btn btn-secondary">Add Input</button>
+            <input type="hidden" name="statPinjam" value="terpinjam">
+            <!-- <button type="button" id="addInput" class="btn btn-secondary">Add Input</button> -->
         </form>
-        <input type="hidden" name="totProd" id="totProd" value="{{ $totProd }}">
     </div>
 @endsection
 
@@ -120,41 +120,40 @@
             idInput.value = idProd;
         });
 
-        var maxForms = document.getElementById('totProd').value;
         // console.log(document.getElementById('totProd').value);
 
-        $('#addInput').click(function() {
-            if (formCount < maxForms) {
-                var clonedFormGroup = $('.form-prog-borrow').first().clone();
-                clonedFormGroup.find('input, select, span').each(function() {
-                    var originalName = $(this).attr('name');
-                    $(this).attr('name', originalName + formCount);
-                    var originalName = $(this).attr('id');
-                    $(this).attr('id', originalName + formCount);
-                });
-                var selectedProductId = $('.form-prog-borrow').first().find('select[name="idProd"]').val();
-                clonedFormGroup.find('select[name="idProd' + formCount + '"]').find('option[value="' +
-                    selectedProductId + '"]').remove();
+        // $('#addInput').click(function() {
+        //     if (formCount < maxForms) {
+        //         var clonedFormGroup = $('.form-prog-borrow').first().clone();
+        //         clonedFormGroup.find('input, select, span').each(function() {
+        //             var originalName = $(this).attr('name');
+        //             $(this).attr('name', originalName + formCount);
+        //             var originalName = $(this).attr('id');
+        //             $(this).attr('id', originalName + formCount);
+        //         });
+        //         var selectedProductId = $('.form-prog-borrow').first().find('select[name="idProd"]').val();
+        //         clonedFormGroup.find('select[name="idProd' + formCount + '"]').find('option[value="' +
+        //             selectedProductId + '"]').remove();
 
-                clonedFormGroup.appendTo('.form-group');
+        //         clonedFormGroup.appendTo('.form-group');
 
-                var selectElement = document.getElementById('idProd' + formCount);
-                var selectedOption = selectElement.options[selectElement.selectedIndex];
+        //         var selectElement = document.getElementById('idProd' + formCount);
+        //         var selectedOption = selectElement.options[selectElement.selectedIndex];
 
-                var total = selectedOption.getAttribute('data-total');
-                var stokTersedia = selectedOption.getAttribute('data-stokTersedia');
+        //         var total = selectedOption.getAttribute('data-total');
+        //         var stokTersedia = selectedOption.getAttribute('data-stokTersedia');
 
-                document.getElementById('stokProdQuan' + formCount).max = total - stokTersedia;
-                document.getElementById('stokTotalProd' + formCount).textContent = total;
-                document.getElementById('stokBorrowProd' + formCount).textContent = total - stokTersedia;
+        //         document.getElementById('stokProdQuan' + formCount).max = total - stokTersedia;
+        //         document.getElementById('stokTotalProd' + formCount).textContent = total;
+        //         document.getElementById('stokBorrowProd' + formCount).textContent = total - stokTersedia;
 
-                formCount++;
-                document.getElementById('formBorrow').totProdBorrow.value = formCount;
-            } else {
-                alert(
-                    'Anda tidak dapat menambahkan lebih banyak barang. Jumlah form tidak boleh melebihi jumlah total barang.'
-                );
-            }
-        });
+        //         formCount++;
+        //         document.getElementById('formBorrow').totProdBorrow.value = formCount;
+        //     } else {
+        //         alert(
+        //             'Anda tidak dapat menambahkan lebih banyak barang. Jumlah form tidak boleh melebihi jumlah total barang.'
+        //         );
+        //     }
+        // });
     </script>
 @endsection

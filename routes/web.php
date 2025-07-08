@@ -46,17 +46,18 @@ route::get('/batchprod', [BatchController::class, 'index'])->name('batch.index')
 Route::post('/logProduct', [ProductAbisPakaiController::class, 'logProduct'])->name('log.getLogProduct');
 Route::post('/stokBatchProduct', [ProductAbisPakaiController::class, 'stokBatchProduct'])->name('log.getStokBatchProduct');
 route::get('/laporanharianbarangabispakai', [ProductAbisPakaiController::class, 'laporanharianbap'])->name('log.logpap');
-Route::post('/logBatch', [BatchController::class, 'logBatch'])->name('log.getLogBatchProduct');
+Route::get('/logBatch', [BatchController::class, 'logBatch'])->name('log.getLogBatchProduct');
 
 route::get('/identitaspeminjam', [IdentitasPeminjamController::class, 'index'])->name('identitas.index');
 Route::post('/identitaspeminjambaru', [IdentitasPeminjamController::class, "store"])->name('identitas.store');
 route::get('/identitaspeminjamterhapus', [IdentitasPeminjamController::class, 'identitasdeleted'])->name('identitas.getDeleteIdentitasList');
 Route::post('/identitaspeminjam/delete/{id}', [IdentitasPeminjamController::class, "destroy"])->name('identitas.destroy');
 Route::post('/identitaspeminjam/undelete/{id}', [IdentitasPeminjamController::class, "restore"])->name('identitas.restore');
+Route::post('/logidentitaspeminjam/{id}',[IdentitasPeminjamController::class, "getLogIdentitasPeminjam"])->name('identitas.getLogIdentitasPeminjam');
 
 route::get('/productpinjam', [BarangPinjamController::class, 'index'])->name('productpinjam.index');
 Route::post('/productpinjambaru', [BarangPinjamController::class, "store"])->name('productpinjam.store');
-Route::post('productpinjam/pinjam', [BarangPinjamController::class, 'getBorrowForm'])->name('productpinjam.getBorrowForm');
+Route::post('/productpinjam/pinjam', [BarangPinjamController::class, 'getBorrowForm'])->name('productpinjam.getBorrowForm');
 Route::post('/pinjam', [BarangPinjamController::class, "borrowProduct"])->name('productpinjam.borrowProduct');
 route::post('/productpinjamterhapus/{tipe}', [BarangPinjamController::class, 'indexdeleted'])->name('productpinjam.getDeleteBarangList');
 Route::post('/productpinjam/delete/{id}', [BarangPinjamController::class, "destroy"])->name('productpinjam.destroy');
@@ -65,6 +66,9 @@ Route::post('/productpinjam/undelete/{id}', [BarangPinjamController::class, "res
 route::get('/barangkembali', [PeminjamanController::class, 'index'])->name('barangkembali.index');
 route::post('/barangkembali/status', [PeminjamanController::class, 'statuskembali'])->name('barangkembali.status');
 route::post('/barangkembali/updatestatus', [PeminjamanController::class, 'updatestatuskembali'])->name('barangkembali.updatestatus');
+
+route::get('/laporanbulananbarangpinjam', [BarangPinjamController::class, 'laporanbulananpinjam'])->name('log.logpinjam');
+
 
 // route::get('/productabispakaigigi', [ProductAbisPakaiController::class, 'indexdental'])->name('dental.index');
 // Route::post('/productbarugigi', [ProductAbisPakaiController::class, "storedental"])->name('dental.storedental');

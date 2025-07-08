@@ -148,7 +148,22 @@ class IdentitasPeminjamController extends Controller
         }
     }
 
-    function getLogIdentitasPeminjam(Request $request)
+    function getLogIdentitasPeminjam(Request $request, $id)
     {
-    }
+        $data = \DB::table('detail_peminjam as dp')
+        ->join('peminjaman as p', 'dp.peminjaman_id', '=', 'p.id')
+        ->join('barang_pinjam as bp', 'dp.product_pinjam_id', '=', 'bp.id')
+        ->where('p.identitas_peminjam_id', $id)
+        ->select(
+            'dp.peminjaman_id',
+            'bp.nama_barang',
+            'dp.total_barang_dipinjam',
+            'dp.status_barang_kembali'
+        )
+        ->get();
+                
+           $html = view('identitas_peminjam.logIdentitasPeminjam', compact('data'))->render();
+
+            return response()->json(['msg' => $html]);
+        }
 }

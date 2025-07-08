@@ -122,9 +122,15 @@
                             <input type="text" class="form-control" name="nameProduct" id="nameProd"
                                 aria-describedby="nameHelp" placeholder="Nama produk">
 
-                            <label for="satuanProd">Satuan</label>
-                            <input type="text" class="form-control" name="satuanProd" id="satuanProd"
-                                aria-describedby="satuanHelp" placeholder="Satuan">
+                            <label for="satuanProd">Satuan produk</label>
+                            <select name="satuanProd" id="satuanProd" class="form-control" required>
+                                <option value="">-- Pilih Satuan --</option>
+                                <option value="botol">botol</option>
+                                <option value="saset">saset</option>
+                                <option value="kotak">kotak</option>
+                                <option value="syringe">syringe</option>
+
+                            </select>
 
                             <label for="descProd">Deskripsi</label>
                             <input type="text" class="form-control" name="descProd" id="descProd"
@@ -139,9 +145,10 @@
                                 aria-describedby="dateExHelp"
                                 min="{{ \Carbon\Carbon::now('Asia/Jakarta')->format('Y-m-d') }}">
 
+                            <label for="tgglEx">Pilih Poli</label>
                             <select name="tipeProd" id="tipeProd" class="form-control" aria-describedby="tipeHelp">
-                                <option value="Poli Gigi">Poli Gigi</option>
-                                <option value="Umum">Umum</option>
+                                <option value="Gigi">Poli Gigi</option>
+                                <option value="Umum">Poli Umum</option>
                             </select>
                         </div>
                 </div>
@@ -236,7 +243,8 @@
                     'id': id
                 },
                 success: function(data) {
-                    $('#modalContent').html(data.msg)
+                    $('#modalContent').html(data.msg),
+                    console.log('Response:', data.msg)
                 }
             });
         }

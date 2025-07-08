@@ -1,10 +1,7 @@
 <form method="POST" action="{{ route('product.updateStockOut', $pap->id) }}">
     @csrf
-<<<<<<< Updated upstream
-=======
     @can('staf')
     {{-- @method('PUT') --}}
->>>>>>> Stashed changes
     <div class="form-group">
         <label for="idProd">ID produk</label>
         <input type="text" class="form-control" name="idProd" id="idProd" aria-describedby="idHelp"
@@ -21,11 +18,12 @@
         @endphp
         <select name="batchProd" id="batchProd" class="form-control" onchange="updateMaxValue(this)">
             @php
-                $groupedBatches = $pap->logBatch->sortBy('tanggal_kadaluwarsa')->groupBy('id');
+                $groupedBatches = $pap->batchList->sortBy('tanggal_kadaluarsa')->groupBy('id');
             @endphp
             @foreach ($groupedBatches as $batchId => $batches)
                 @php
-                    $totalQuantityIn = $batches->sum('pivot.quantity_in');
+                    $batchModel = \App\Models\Batch::find($batchId);
+                    $totalQuantityIn =  $batchModel ? $batchModel->jumlah : 0;
                     $totalQuantityOut = $batches->sum('pivot.quantity_out');
                     $remainingStock = $totalQuantityIn - $totalQuantityOut;
                 if ($remainingStock > 0) {
@@ -36,7 +34,7 @@
                 @endphp
                         <option value="{{ $batchId }}" data-quantity="{{ $remainingStock }}">
                             {{ $batchId }} - sisa stok: {{ $remainingStock }} ||
-                                <strong>tanggal kadaluwarsa: {{ $batches->first()->tanggal_kadaluwarsa }}</strong>
+                                <strong>tanggal kadaluarsa: {{ $batches->first()->tanggal_kadaluarsa }}</strong>
                         </option>
                 @php
                     }

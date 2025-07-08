@@ -18,12 +18,17 @@ class ProductAbisPakai extends Model
 
     public function logBatch()
     {
-        return $this->belongsToMany(Batch::class, 'detail_batch_product', 'product_id', 'batch_product')->withPivot('quantity_in', 'quantity_out', 'tanggal');
+        return $this->belongsToMany(Batch::class, 'detail_batch_product', 'batch_product_id','batch_product_product_abis_pakai_id')->withPivot('quantity_out', 'tanggal');
     }
 
     public function productWithTrashed()
     {
-        return $this->belongsToMany(Batch::class, 'detail_batch_product', 'product_id', 'batch_product')
+        return $this->belongsToMany(Batch::class, 'detail_batch_product', 'batch_product_id','batch_product_product_abis_pakai_id')
             ->withPivot('simpan_quantity_in', 'quantity_out', 'tanggal')->withTrashed();
     }
+    public function batchList()
+    {
+        return $this->hasMany(Batch::class, 'product_abis_pakai_id');
+    }
 }
+

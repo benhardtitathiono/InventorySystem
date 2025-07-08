@@ -185,6 +185,24 @@
             });
         }
 
+        function getLogIdentitasPeminjam(id) {
+            $.ajax({
+                type: 'POST',
+                url: '/logidentitaspeminjam/' + id, // pastikan route ini benar
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'id': id
+                },
+                success: function(data) {
+                    $('#modalContent').html(data.msg); // atau sesuai modal yang kamu pakai
+                    $('#modalEditIdentitasPeminjam').modal('show'); // pastikan modalnya ada
+                },
+                error: function(xhr, status, error) {
+                    alert("Gagal memuat data log.");
+                }
+            });
+        }
+
         // function getLogProduct(id) {
         //     $.ajax({
         //         type: 'POST',

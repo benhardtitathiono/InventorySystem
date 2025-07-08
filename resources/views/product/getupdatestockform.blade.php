@@ -11,8 +11,16 @@
             value="{{ $pap->nama_barang }}">
 
         <label for="satuanProd">Satuan produk</label>
-        <input type="text" class="form-control" name="satuanProd" id="satuanProd" aria-describedby="satuanHelp"
-            value="{{ $pap->satuan }}">
+        <!-- <input type="text" class="form-control" name="satuanProd" id="satuanProd" aria-describedby="satuanHelp"
+            value="{{ $pap->satuan }}"> -->
+        <select name="satuanProd" id="satuanProd" class="form-control" required>
+            <option value="">-- Pilih Satuan --</option>
+            <option value="botol"{{ $pap->satuan == 'botol' ? 'selected' : '' }}>botol</option>
+            <option value="saset"{{ $pap->satuan == 'saset' ? 'selected' : '' }}>saset</option>
+            <option value="kotak"{{ $pap->satuan == 'kotak' ? 'selected' : '' }}>kotak</option>
+            <option value="syringe"{{ $pap->satuan == 'syringe' ? 'selected' : '' }}>syringe</option>
+
+        </select>
 
         <label for="description">Deskripsi</label>
         <input type="text" class="form-control" name="descProd" id="descProd" aria-describedby="descHelp"

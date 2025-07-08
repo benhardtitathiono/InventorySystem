@@ -27,6 +27,10 @@ class PeminjamanController extends Controller
             ->join('barang_pinjam as bp', 'dp.product_pinjam_id', '=', 'bp.id')
             ->join('identitas_peminjam as ip', 'p.identitas_peminjam_id', '=', 'ip.id')
             ->where('bp.tipe', $tipe->kategori)
+            ->where(function ($query) {
+                $query->whereNull('dp.status_barang_kembali')
+                    ->orWhere('dp.status_barang_kembali', 'terpinjam');
+            })
             ->groupBy('pinjamID', 'ip.nama', 'p.created_at', 'p.updated_at')
             ->select('p.id as pinjamID', 'ip.nama', 'p.created_at', 'p.updated_at')
             ->get();
@@ -102,8 +106,8 @@ class PeminjamanController extends Controller
     function statuskembali(Request $request)
     {
         $idPinjam = $request->id;
-        $peminjaman = Peminjaman::find($idPinjam);
-        // dd($peminjaman->detailBarang);
+        $peminjaman = Peminjaman::with(['detailBarang', 'identitasPeminjam'])->find($idPinjam);
+        // dd($peminjaman);
         return response()->json(
             array(
                 'status' => 'oke',
@@ -115,29 +119,57 @@ class PeminjamanController extends Controller
     {
         // dd($request);
 
-        $idPinjam = $request->query->keys();
+        $idPinjamArr = $request->query->keys();
+        $idPinjam = $idPinjamArr[0]; 
 
         $peminjaman = Peminjaman::find($idPinjam);
 
-        $tipeProd = '';
-        if ($peminjaman) {
-            for ($i = 1; $i < $request->totProd; $i++) {
-                $prodID = $request->input('prodID' . $i);
-
-                $tipeProd = BarangPinjam::find($prodID);
-                $tipe = $tipeProd->tipe;
-                $statKembali = $request->input('statKembali' . $i);
-
-                // Update the pivot table data using DB query
-                DB::table('detail_peminjam')  // replace with your actual pivot table name
-                    ->where('peminjaman_id', $idPinjam)
-                    ->where('product_pinjam_id', $prodID)
-                    ->update([
-                        'status_barang_kembali' => $statKembali,
-                        'updated_at' => now()  // Update the timestamp
-                    ]);
-            }
-            return redirect()->to('barangkembali?kategori=' . $tipe)->with('message', 'Sukses menyelesaikan pinjaman! Silahkan cek peminjaman untuk validasi');
+        if (!$peminjaman) {
+            return back()->with('message', 'Data peminjaman tidak ditemukan.');
         }
+
+        $prodID = $request->input('prodID');
+        $statKembali = $request->input('statKembali');
+
+        $barang = BarangPinjam::find($prodID);
+        $tipe = $barang->tipe;
+        // dd ( $prodID,$idPinjam,$tipe,$statKembali);
+        DB::table('detail_peminjam')
+            ->where('peminjaman_id', $idPinjam)
+            ->where('product_pinjam_id', $prodID)
+            ->update([
+                'status_barang_kembali' => $statKembali,
+                'updated_at' => now()
+            ]);
+
+        return redirect()->to('barangkembali?kategori=' . $tipe)
+            ->with('message', 'Sukses menyelesaikan pinjaman! Silahkan cek peminjaman untuk validasi');
+
+
+        // $idPinjam = $request->query->keys();
+
+        // $peminjaman = Peminjaman::find($idPinjam);
+
+        // $tipeProd = '';
+        // $tipe = '';
+        // if ($peminjaman) {
+        //     for ($i = 1; $i < $request->totProd; $i++) {
+        //         $prodID = $request->input('prodID' . $i);
+
+        //         $tipeProd = BarangPinjam::find($prodID);
+        //         $tipe = $tipeProd->tipe;
+        //         $statKembali = $request->input('statKembali' . $i);
+
+        //         // Update the pivot table data using DB query
+        //         DB::table('detail_peminjam')  // replace with your actual pivot table name
+        //             ->where('peminjaman_id', $idPinjam)
+        //             ->where('product_pinjam_id', $prodID)
+        //             ->update([
+        //                 'status_barang_kembali' => $statKembali,
+        //                 'updated_at' => now()  // Update the timestamp
+        //             ]);
+        //     }
+        //     return redirect()->to('barangkembali?kategori=' . $tipe)->with('message', 'Sukses menyelesaikan pinjaman! Silahkan cek peminjaman untuk validasi');
+        // }
     }
 }

@@ -101,15 +101,8 @@
                                     <td>{{ $bp->tanggal_masuk }}</td>
                                     <td>{{ $bp->tanggal_kadaluarsa }}</td>
                                     <td style="text-align: center">
-                                        {{-- <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
-                                            onclick="getLogProduct({{ $p->id }})">Log Stok</a> --}}
-                                        <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs">Log
-                                            Stok</a>
-                                        {{-- <form method="POST" action="{{ route('product.destroy', $p->id) }}"> --}}
-                                        {{-- @csrf --}}
-                                        <input type="submit" value="Hapus" class="btn btn-danger"
-                                            onclick="return confirm('Apakah yakin ingin menghapus produk dengan ID {{ $bp->id }} - {{ $bp->nama_barang }}?')">
-                                        {{-- </form> --}}
+                                        <a href="#modalEditProduct" data-toggle="modal" class="btn btn-warning btn-xs"
+                                            onclick="getLogBatch({{ $bp->id }})">Log Stok</a>
                                     </td>
                                 </tr>
                             @endif
@@ -173,17 +166,18 @@
             });
         });
 
-        // function getDeleteProductList(tipe) {
-        //     $.ajax({
-        //         type: 'POST',
-        //         url: "{{ url('productabispakaiterhapus') }}/" + tipe,
-        //         data: {
-        //             '_token': '<?php echo csrf_token(); ?>',
-        //         },
-        //         success: function(data) {
-        //             $('#modalContent').html(data.msg)
-        //         }
-        //     });
-        // }
+        function getLogBatch(id) {
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('logBatch') }}",
+                data: {
+                    '_token': '<?php echo csrf_token(); ?>',
+                    'id': id,
+                },
+                success: function(data) {
+                    $('#modalContent').html(data.msg)
+                }
+            });
+        }
     </script>
 @endsection

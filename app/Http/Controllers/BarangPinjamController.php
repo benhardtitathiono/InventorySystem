@@ -7,6 +7,9 @@ use App\Models\IdentitasPeminjam;
 use App\Models\Peminjaman;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+
 
 class BarangPinjamController extends Controller
 {
@@ -20,18 +23,36 @@ class BarangPinjamController extends Controller
         //
         // dd($tipe);
         $bp = BarangPinjam::where('tipe', $tipe->get('kategori'))->orderBy('nama_barang')->get();
+        //dd($bp);
+
         foreach ($bp as $barang) {
-            $barang->totalBarangDipinjam = $barang->detailPinjam()->sum('total_barang_dipinjam');
-            if (!isset($barang->totalBarangDipinjam)) {
-                $barang->totalBarangDipinjam = 0;
-            }
+            // Hitung total dipinjam dari detail_peminjam YANG BELUM DIKEMBALIKAN
+            $terpinjam = DB::table('detail_peminjam')
+                ->where('product_pinjam_id', $barang->id)
+                ->where(function ($q) {
+                    $q->whereNull('status_barang_kembali')
+                    ->orWhere('status_barang_kembali', 'terpinjam');
+                })
+                ->sum('total_barang_dipinjam');
+
+            $barang->stok_terpinjam = $terpinjam;
+            $barang->stok_tersedia = $barang->jumlah - $terpinjam;
         }
+        //dd($barang->stok_tersedia);
+        return view('peminjaman.index', ['barangPinjam' => $bp]);
+
+
+        // foreach ($bp as $barang) {
+        //     $barang->totalBarangDipinjam = $barang->detailPinjam()->sum('total_barang_dipinjam');
+        //     if (!isset($barang->totalBarangDipinjam)) {
+        //         $barang->totalBarangDipinjam = 0;
+        //     }
+        // }
         // foreach ($bp as $barang) {
         //     dd($barang->totalBarangDipinjam);
         // }
 
-        // dd($bp);
-        return view('peminjaman.index', ['barangPinjam' => $bp]);
+        // return view('peminjaman.index', ['barangPinjam' => $bp]);
     }
 
     function indexdeleted($tipe)
@@ -169,50 +190,92 @@ class BarangPinjamController extends Controller
     {
         // dd($tipe->query('kategori'));
         $idPeminjam = IdentitasPeminjam::all();
-        $barangPinjam = BarangPinjam::where('tipe', $tipe->query('kategori'))->orderBy('nama_barang')->get();
-        $totProd = count($barangPinjam);
-        return view('peminjaman.getBorrowform', ['barangPinjam' => $barangPinjam, 'idPeminjam' => $idPeminjam, 'totProd' => $totProd]);
+        // $barangPinjam = BarangPinjam::where('tipe', $tipe->query('kategori'))->orderBy('nama_barang')->get();
+        $barangPinjam = BarangPinjam::withCount([
+            'detailPinjam as totalBarangDipinjam' => function ($q) {
+                $q->select(DB::raw('COALESCE(SUM(total_barang_dipinjam), 0)'));
+            }
+        ])
+        ->where('tipe', $tipe->query('kategori'))
+        ->orderBy('nama_barang')
+        ->get();
+        return view('peminjaman.getBorrowform', ['barangPinjam' => $barangPinjam, 'idPeminjam' => $idPeminjam]);
     }
 
     function borrowProduct(Request $request)
     {
-        $session_idIdentity = $request->get('idIdentity');
-        $idIdentity = $request->get('identityPinjam');
+        // $session_idIdentity = $request->get('idIdentity');
 
-        if ($session_idIdentity != $idIdentity) {
-            return redirect()->back()->withErrors(['error' => 'Identitas tidak ditemukan']);
-        } else {
-            $totProdBorrow = $request->get('totProdBorrow');
-            $tipeProd = '';
-            $pinjam = new Peminjaman();
-            do {
-                $idPinjam = (int)Carbon::now('Asia/Jakarta')->format('Ymd') . rand(10, 99);
-                $pinjam->id = $idPinjam;
-            } while ($pinjam::where('id', $idPinjam)->exists());
-            $pinjam->identitas_peminjam_id = $idIdentity;
-            $pinjam->created_at = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-            $pinjam->updated_at = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-            $pinjam->save();
-            for ($i = 0; $i < $totProdBorrow; $i++) {
-                $id = $request->get('idProd' . ($i > 0 ? $i : ''));
-                $jumlah = $request->get('stokProdQuan' . ($i > 0 ? $i : ''));
-                $bp = BarangPinjam::find($id);
-                $tipeProd = $bp->tipe;
-                $totProduk = $bp->jumlah - $bp->detailPinjam()->sum('total_barang_dipinjam');
-                if ($totProduk >= $jumlah or $totProduk <= 0) {
-                    $pinjam->detailBarang()->attach($id, [
-                        "created_at" => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'),
-                        "updated_at" => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'),
-                        "total_barang_dipinjam" => $jumlah,
-                    ]);
-                } else {
-                    return redirect()->back()->with('message', 'Gagal Meminjam Barang! Stok barang ' . $bp->nama_barang . ' kurang dari yang akan dipinjam ');
-                }
-                var_dump(Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'));
-                // dd($pinjam);
+        $idIdentity = $request->get('identityPinjam');
+        $totProdBorrow = $request->get('totProdBorrow');
+        $stats = $request->get('statPinjam');
+        // dd($stats);
+        $tipeProd = '';
+
+        do {
+            $idPinjam = (int)Carbon::now('Asia/Jakarta')->format('Ymd') . rand(10, 99);
+        } 
+        while (DB::table('peminjaman')->where('id', $idPinjam)->exists());
+
+            $idProd = $request->get('idProd');
+            $jumlahPinjam = $request->get('stokProdQuan');
+            
+
+            // Ambil data barang
+            $bp = DB::table('barang_pinjam')->where('id', $idProd)->first();
+            if (!$bp) {
+                return redirect()->back()->with('message', 'Barang dengan ID ' . $id . ' tidak ditemukan!');
             }
-            return redirect()->to('barangkembali?kategori=' . $tipeProd)->with('message', 'Sukses Meminjam Barang! Silahkan cek barang untuk validasi');
-            // return redirect()->to('barangkembali?kategori='$)->with('message', 'Sukses Meminjam Barang! Silahkan cek barang untuk validasi');
-        }
+
+            $tipeProd = $bp->tipe;
+
+            // Hitung stok tersedia
+            $totalBarang = DB::table('barang_pinjam')->where('id', $idProd)->value('jumlah');
+
+            $barangTersedia = $totalBarang - $jumlahPinjam;
+            // dd($totalBarang, $barangTersedia);
+
+            if ($barangTersedia >= $jumlahPinjam && $jumlahPinjam > 0) {
+                DB::table('peminjaman')->insert([
+                'id' => $idPinjam,
+                'identitas_peminjam_id' => $idIdentity,
+                'created_at' => Carbon::now('Asia/Jakarta'),
+                'updated_at' => Carbon::now('Asia/Jakarta'),
+            ]);
+
+                DB::table('detail_peminjam')->insert([
+                    'id'=>$idPinjam,
+                    'product_pinjam_id' => $idProd,
+                    'peminjaman_id' => $idPinjam,
+                    'created_at' => Carbon::now('Asia/Jakarta'),
+                    'updated_at' => Carbon::now('Asia/Jakarta'),
+                    'total_barang_dipinjam' => $jumlahPinjam,
+                    'status_barang_kembali' => $stats
+                ]);
+            } else {
+                return redirect()->to('barangkembali?kategori=' . $tipeProd)->with('message', 'Gagal meminjam! Stok barang "' . $bp->nama_barang . '" tidak mencukupi.');
+            }
+
+        return redirect()->to('barangkembali?kategori=' . $tipeProd)
+            ->with('message', 'Sukses Meminjam Barang! Silahkan cek barang untuk validasi.');
+    }
+    function laporanbulananpinjam(){
+        $laporan = DB::table('detail_peminjam')
+        ->join('barang_pinjam', 'detail_peminjam.product_pinjam_id', '=', 'barang_pinjam.id')
+        ->select(
+            'barang_pinjam.id as id_barang',
+            'barang_pinjam.nama_barang',
+            DB::raw('SUM(detail_peminjam.total_barang_dipinjam) as total_dipinjam'),
+            DB::raw("DATE_FORMAT(detail_peminjam.created_at, '%M %Y') as bulan")
+        )
+        ->groupBy(
+            'barang_pinjam.id',
+            'barang_pinjam.nama_barang',
+            DB::raw("DATE_FORMAT(detail_peminjam.created_at, '%M %Y')")
+        )
+        ->orderByDesc(DB::raw("YEAR(detail_peminjam.created_at)"))
+        ->orderByDesc(DB::raw("MONTH(detail_peminjam.created_at)"))
+        ->get();
+        return view('riwayat.monthlyreportbarangpinjam', compact('laporan'));
     }
 }

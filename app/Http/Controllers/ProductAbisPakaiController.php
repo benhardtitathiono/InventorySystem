@@ -127,18 +127,30 @@ class ProductAbisPakaiController extends Controller
             = $request->get('tipeProd');
         $pap->save();
 
-        $idBatch = $idProd . (int)Carbon::now('Asia/Jakarta')->format('Ymd');
+        $shrtId = substr($idProd, -5);
+        $idBatch = $shrtId . (int)Carbon::now('Asia/Jakarta')->format('Y-m-d'). rand(10, 99);
+
         $b = new Batch();
         $b->id = $idBatch;
+        $b->product_abis_pakai_id = $idProd;
         $b->tanggal_masuk = Carbon::now('Asia/Jakarta')->format('Y-m-d');
         $b->tanggal_kadaluarsa = $request->get('dateExProd');
         $b->jumlah = $request->get('jumlahProd');
+        $b->simpan_quantity_in = $request->get('jumlahProd');
         $b->save();
-
+        
+        // DB::table('detail_batch_product')->insert([
+        //     'batch_product_id' => $idBatch,
+        //     'batch_product_product_abis_pakai_id' => $idProd,
+        //     'tanggal' => Carbon::now('Asia/Jakarta')->format('Y-m-d')
+        // ]);
         $b->logBatch()->attach($idProd, [
-            // "quantity_in" => $request->get('jumlahProd'),
+            "batch_product_id" => $idBatch,
+            "batch_product_product_abis_pakai_id" => $idProd,
+            // "simpan_quantity_in" => $request->get('jumlahProd'),
             "tanggal" => Carbon::now('Asia/Jakarta')->format('Y-m-d')
         ]);
+
         $b->save();
 
         return redirect()->to('productabispakai?kategori=' . $pap->tipe)->with('message', 'Sukses Membuat Produk Baru! Silahkan cek produk ' . $request->get('nameProd') . ' untuk validasi');
@@ -252,7 +264,10 @@ class ProductAbisPakaiController extends Controller
         $b = new Batch();
         $session_id = session()->get('product_id');
         $id = $request->get('idProd');
+        $shortId = substr($id, -5);
+        $batchid = $shortId . (int)Carbon::now('Asia/Jakarta')->format('Y-m-d'). rand(10, 99);
 
+        // dd($batchid);
         if ($id != $session_id) {
             return redirect()->back()->withErrors(['error' => 'Produk tidak ditemukan']);
         } else {
@@ -267,17 +282,28 @@ class ProductAbisPakaiController extends Controller
             if ($product->isDirty()) {
                 $product->save();
             }
-            $b->id = $id . (int)Carbon::now('Asia/Jakarta')->format('Ymd');
+            
+            $b->id = $batchid;
+            $b->product_abis_pakai_id = $id;
             $b->tanggal_masuk = Carbon::now('Asia/Jakarta')->format('Y-m-d');
-            $b->tanggal_kadaluwarsa = $dateEx;
+            $b->simpan_quantity_in = $jumlah;
+            $b->tanggal_kadaluarsa = $dateEx;
             $b->jumlah = $jumlah;
             $b->save();
 
+            // DB::table('detail_batch_product')->insert([
+            //     'batch_product_id' => $batchid,
+            //     'batch_product_product_abis_pakai_id' => $id,
+            //     'tanggal' => Carbon::now('Asia/Jakarta')->format('Y-m-d')
+            // ]);
+
             $b->logBatch()->attach($id, [
-                "quantity_in" => $jumlah,
+                "batch_product_id" => $batchid,
+                "batch_product_product_abis_pakai_id" => $id,
                 "tanggal" => Carbon::now('Asia/Jakarta')->format('Y-m-d')
             ]);
             $b->save();
+
 
             $product->jumlah += $jumlah;
             $product->updated_at = Carbon::now(
@@ -354,12 +380,12 @@ class ProductAbisPakaiController extends Controller
         }
         $id = $request->get('id');
         $logProduct = DB::table('product_abis_pakai as pap')
-            ->join('detail_batch_product as dbp', 'pap.id', '=', 'db.product_abis_pakai_id')
-            ->join('batch_product as bp', 'dbp.batch_product_id', '=', 'bp.id')
+            ->join('batch_product as bp', 'pap.id', '=', 'bp.product_abis_pakai_id')
+            ->join('detail_batch_product as dbp', 'dbp.batch_product_id', '=', 'bp.id')
             ->where('pap.id', $id)
-            ->groupBy('pap.id', 'pap.nama_barang', 'bp.id', 'dbp.quantity_in', 'dbp.quantity_out', 'dbp.tanggal')
+            ->groupBy('pap.id', 'pap.nama_barang', 'bp.id', 'bp.jumlah','bp.simpan_quantity_in', 'dbp.quantity_out', 'dbp.tanggal')
             ->orderBy('dbp.tanggal', 'desc')
-            ->select('pap.id', 'pap.nama_barang', 'bp.id as batch_product', 'dbp.quantity_in', 'dbp.quantity_out', 'dbp.tanggal')
+            ->select('pap.id', 'pap.nama_barang', 'bp.id as batch_product', 'bp.jumlah','bp.simpan_quantity_in', 'dbp.quantity_out', 'dbp.tanggal')
             ->get();
         // dd($logProduct);
         return response()->json(
@@ -374,12 +400,12 @@ class ProductAbisPakaiController extends Controller
     {
         $id = $request->get('id');
         $stokBatchProduct = DB::table('product_abis_pakai as pap')
-            ->join('detail_batch_product as dbp', 'pap.id', '=', 'bp.product_abis_pakai_id')
-            ->join('batch_product as bp', 'dbp.batch_product_id', '=', 'bp.id')
+            ->join('batch_product as bp', 'pap.id', '=', 'bp.product_abis_pakai_id')
+            ->join('detail_batch_product as dbp', 'dbp.batch_product_id', '=', 'bp.id')
             ->where('pap.id', $id)
-            ->groupBy('bp.id', 'bp.tanggal_kadaluarsa')
+            ->groupBy('bp.id', 'bp.jumlah','dbp.quantity_out','bp.tanggal_kadaluarsa')
             ->orderBy('bp.tanggal_kadaluarsa')
-            ->select('bp.id as batch_product', DB::raw('sum(dbp.quantity_in) as tot_in'), DB::raw('sum(dbp.quantity_out) as tot_out'), 'bp.tanggal_kadaluarsa')
+            ->select('bp.id as batch_product', 'bp.jumlah as tot_in', 'dbp.quantity_out as tot_out', 'bp.tanggal_kadaluarsa')
             ->get();
         // dd($stokBatchProduct);
         return response()->json(

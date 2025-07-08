@@ -35,8 +35,9 @@
                     <th>ID</th>
                     <th>Nama Barang</th>
                     <th>Deskripsi</th>
-                    <th>Stok</th>
-                    <th>Stok Tersedia</th>
+                    <th>Jumlah Unit</th>
+                    <th>Unit Terpinjam</th>
+                    <th>Unit Tersedia/Kembali</th>
                     <th>Tanggal Ditambahkan</th>
                     <th>Terakhir Diperbarui</th>
 
@@ -51,7 +52,9 @@
                             <td class="editable" id="td-nama_barang-{{ $bp->id }}">{{ $bp->nama_barang }}</td>
                             <td class="editable" id="td-deskripsi-{{ $bp->id }}">{{ $bp->deskripsi }}</td>
                             <td id="td-jumlah-{{ $bp->id }}">{{ $bp->jumlah }}</td>
-                            <td>{{ $bp->jumlah - $bp->totalBarangDipinjam }}</td>
+                            <!-- <td>{{ $bp->jumlah - $bp->totalBarangDipinjam }}</td> -->
+                            <td>{{ $bp->stok_terpinjam }}</td>
+                            <td>{{ $bp->stok_tersedia }}</td>
                             <td id="td-created_at-{{ $bp->id }}">{{ $bp->created_at }}</td>
                             <td id="td-updated_at-{{ $bp->id }}">{{ $bp->updated_at }}</td>
 
@@ -105,7 +108,7 @@
                             <input type="number" class="form-control" name="jumlahBarang" id="jumlahBarang"
                                 aria-describedby="jumlahHelp" placeholder="Stok awal" min="1">
 
-                            <label for="tipeBarang">Stok</label>
+                            <label for="tipeBarang">Poli</label>
                             <select name="tipeBarang" id="tipeBarang" class="form-control" aria-describedby="tipeHelp">
                                 <option value="Poli Gigi">Poli Gigi</option>
                                 <option value="Umum">Umum</option>

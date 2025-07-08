@@ -94,4 +94,22 @@ class BatchController extends Controller
     {
         //
     }
+
+    function logBatch(Request $request)
+    {
+        $logBatch = DB::table('batch_product as bp')
+            ->join('detail_batch_product as dbp', 'bp.id', '=', 'dbp.batch_product_id')
+            ->join('product_abis_pakai as pap', 'bp.product_abis_pakai_id', '=', 'pap.id')
+            ->where('dbp.batch_product_id', $request->get('id'))
+            ->whereNull('pap.deleted_at')
+            ->orderBy('dbp.tanggal')
+            ->select('dbp.batch_product_id', 'pap.nama_barang', 'dbp.quantity_out', 'dbp.tanggal')
+            ->get();
+        return response()->json(
+            array(
+                'status' => 'oke',
+                'msg' => view('batch.detailLogBatch', compact('logBatch'))->render()
+            )
+        );
+    }
 }

@@ -19,7 +19,7 @@ class Peminjaman extends Model
             BarangPinjam::class,
             'detail_peminjam',
             'peminjaman_id',
-            'product_pinjam_id'
+            'product_pinjam_id',
         )->withPivot('created_at', 'updated_at', 'total_barang_dipinjam', 'status_barang_kembali');
     }
 

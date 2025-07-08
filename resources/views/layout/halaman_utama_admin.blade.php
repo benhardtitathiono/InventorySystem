@@ -443,7 +443,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     Laporan Riwayat Bahan Habis Pakai</a>
                                 </li>
                                 <li>
-                                    <a href="{{ url('back/albumProduct') }}">
+                                    <a href="{{ url('laporanbulananbarangpinjam') }}">
                                         <i class="icon-book-open"></i>
                                         Laporan Riwayat Peminjaman</a>
                                 </li>

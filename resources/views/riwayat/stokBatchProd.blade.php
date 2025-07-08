@@ -12,7 +12,7 @@
             @foreach ($stokBatchProduct as $sbp)
                 @php
                     $sisaHari = \Carbon\Carbon::now('Asia/Jakarta')->diffInDays(
-                        \Carbon\Carbon::parse($sbp->tanggal_kadaluwarsa),
+                        \Carbon\Carbon::parse($sbp->tanggal_kadaluarsa),
                         false,
                     );
                 @endphp
@@ -32,7 +32,7 @@
                             @else
                                 <td>{{ $sbp->tot_out }}</td>
                             @endif
-                            <td>{{ $sbp->tanggal_kadaluwarsa }} Kurang dari {{ $sisaHari }} hari
+                            <td>{{ $sbp->tanggal_kadaluarsa }} Kurang dari {{ $sisaHari }} hari
                                 lagi
                                 expire
                             </td>
@@ -53,7 +53,7 @@
                             @else
                                 <td>{{ $sbp->tot_out }}</td>
                             @endif
-                            <td>{{ $sbp->tanggal_kadaluwarsa }} sudah expire sejak
+                            <td>{{ $sbp->tanggal_kadaluarsa }} sudah expire sejak
                                 {{ $sisaHari }}
                                 hari lalu
                             </tdlass=>
@@ -74,7 +74,7 @@
                             @else
                                 <td>{{ $sbp->tot_out }}</td>
                             @endif
-                            <td>{{ $sbp->tanggal_kadaluwarsa }}</td>
+                            <td>{{ $sbp->tanggal_kadaluarsa }}</td>
                         @endif
                     </tr>
                 @endif
